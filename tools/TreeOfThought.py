@@ -25,13 +25,13 @@ class TreeOfThought:
         self.generator = ThoughtGenerator()
         self.evaluator = StateEvaluator()
 
-    def search_bfs(self, initial_thought, max_depth):
-        queue = deque([(initial_thought, 0)])
+    def search_DFS(self, initial_thought, max_depth):
+        stack = [(initial_thought, 0)]
         best_thought = None
         best_value = float('-inf')
 
-        while queue:
-            thought, depth = queue.popleft()
+        while stack:
+            thought, depth = stack.pop()
             value = self.evaluator.evaluate(thought)
 
             if value > best_value:
@@ -41,6 +41,6 @@ class TreeOfThought:
             if depth < max_depth:
                 decomposed = self.decomposer.decompose(thought)
                 generated = self.generator.generate(decomposed)
-                queue.extend([(g, depth + 1) for g in generated])
+                stack.extend([(g, depth + 1) for g in generated])
 
         return best_thought
