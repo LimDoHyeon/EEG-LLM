@@ -7,3 +7,6 @@
 <br>
 <h2>Evaluation</h2>
 <br>
+<h2>Reference</h2>
+<p>- Jonathan W.Kim et al. EEG-GPT: EXPLORING CAPABILITIES OF LARGE LANGUAGE MODELS FOR EEG CLASSIFICATION AND INTERPRETATION. 2024. arXiv:2401.18006 [q-bio.QM]</p>
+<p>- Shunyu Yao et al. Tree of Thoughts: Deliberate Problem Solving with Large Language Models. 2023. arXiv: 2305.10601 [cs.CL].</p>
