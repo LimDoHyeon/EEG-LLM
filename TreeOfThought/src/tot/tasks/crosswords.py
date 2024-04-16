@@ -1,9 +1,9 @@
 import re
 import os
 import json
-from tot.tasks.base import Task, DATA_PATH
-from tot.prompts.crosswords import * 
-from tot.models import gpt
+from TreeOfThought.src.tot.tasks.base import Task, DATA_PATH
+from TreeOfThought.src.tot.prompts.crosswords import *
+from TreeOfThought.src.tot.models import gpt
 
 class MiniCrosswordsEnv:
     def __init__(self, file='mini0505.json'):
