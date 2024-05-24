@@ -3,6 +3,10 @@ from scipy.stats import kurtosis
 
 CHANNELS = ['Cz', 'T5', 'T6', 'O1', 'O2']
 
+"""
+mat에서 변환된 csv 파일의 전처리를 위한 함수들.
+"""
+
 
 def calculate_power_ratio(data, band1, band2):
     """
