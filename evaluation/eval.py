@@ -1,13 +1,21 @@
-from sklearn.metrics import roc_auc_score
+"""
+metrics : Kappa's coefficient
+"""
+
+import numpy as np
+import pandas as pd
+from sklearn.metrics import cohen_kappa_score
 
 
-def evaluate_model(eeg_data, labels, model):
+def kappa_score(y_true, y_pred):
     """
-    Evaluate the performance of the decision tree model.
+    Calculate the Kappa's coefficient between the true and predicted labels.
+    :param y_true: True labels
+    :param y_pred: Predicted labels
+    :return: Kappa's coefficient
     """
-    predictions = [model.analyze_eeg(epoch) for epoch in eeg_data]
-    binary_labels = [1 if label == 'abnormal' else 0 for label in labels]
-    binary_predictions = [1 if prediction == 'abnormal' else 0 for prediction in predictions]
+    return cohen_kappa_score(y_true, y_pred)
 
-    auroc = roc_auc_score(binary_labels, binary_predictions)
-    return auroc
+
+# Example usage
+# TODO: y_true, y_pred 받아오는 로직 구현
