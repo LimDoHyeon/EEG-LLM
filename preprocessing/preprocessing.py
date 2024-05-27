@@ -1,52 +1,40 @@
+"""
+파이프라인
+=================
+1. EEG 데이터의 csv 파일 로드
+2. 로드된 데이터 전처리 (feature_extraction.py 참조)
+3. 전처리된 데이터를 json 형식으로 변환 (csv_to_json.py 참조)
+4. json 파일을 파인튜닝 모델에 전달(데이터로더는 필요없음 - subject가 3명이라서), train set을 전달하면 됨 (fine_tuning.py에서 수행, 여기선 return만)
+5. 라벨이 없는 test set을 GPT에 전달 후 결과 확인(classification.py에서 수행 예정)
+"""
+
+import pandas as pd
 import numpy as np
-from scipy.stats import kurtosis
-
-CHANNELS = ['Cz', 'T5', 'T6', 'O1', 'O2']
-
-"""
-mat에서 변환된 csv 파일의 전처리를 위한 함수들.
-"""
+import json
+from feature_extraction import extract_features
+from csv_to_json import csv_to_json
+from fine_tuning import fine_tune_model
 
 
-def calculate_power_ratio(data, band1, band2):
+def pipeline(csv_path, window_size, selected_columns, labels, api_key):
     """
-    Calculate the power ratio between two frequency bands.
+    EEG 데이터를 전처리하고 GPT-3 모델을 파인튜닝하는 파이프라인
+    :param csv_path: EEG 데이터가 저장된 csv 파일 경로
+    :param window_size: EEG 데이터를 나눌 윈도우 크기
+    :param selected_columns: 사용할 EEG 채널(리스트에 제공됨)
+    :param labels: 각 윈도우에 대한 라벨(리스트에 제공됨, left, right, top, bottom)
+    :param api_key: OpenAI API 키
+    :return: 파인튜닝된 모델
     """
-    # Implement power ratio calculation based on given frequency bands.
-    # Placeholder return until function is fully implemented.
-    return np.random.random()
+    # 1. EEG 데이터의 csv 파일 로드
+    df = pd.read_csv(csv_path)
 
+    # 2. 로드된 데이터 전처리
+    preprocessed_df = df.copy()
+    # TODO: 전처리 함수 추가 (feature_extraction.py)
 
-def extract_features(eeg_data, channels=CHANNELS):
-    """
-    Extract features from given EEG data per channel.
-    """
-    features = {}
-    for channel in channels:
-        data = eeg_data[channel]
-        features[channel] = {
-            '90th_percentile': np.percentile(data, 90),
-            'std_dev': np.std(data),
-            'kurtosis': kurtosis(data),
-            'alpha_delta_ratio': calculate_power_ratio(data, 'alpha', 'delta'),
-            'theta_alpha_ratio': calculate_power_ratio(data, 'theta', 'alpha'),
-            'delta_theta_ratio': calculate_power_ratio(data, 'delta', 'theta')
-        }
-    return features
+    # 3. 전처리된 데이터를 json 형식으로 변환
+    json_data = csv_to_json(preprocessed_df, window_size, selected_columns, labels)
 
-
-def extract_all_epochs(eeg_data, epoch_length=20):
-    """
-    Divide EEG data into non-overlapping 20-second epochs and extract features.
-    """
-    num_samples = len(eeg_data[CHANNELS[0]])
-    num_epochs = num_samples // (epoch_length * 250)
-
-    all_features = []
-    for i in range(num_epochs):
-        epoch_data = {channel: eeg_data[channel][i * epoch_length * 250: (i + 1) * epoch_length * 250] for channel in
-                      CHANNELS}
-        features = extract_features(epoch_data)
-        all_features.append(features)
-
-    return all_features
+    # 4. json 파일을 파인튜닝 모델에 전달
+    fine_tune_model(json_data, api_key)
