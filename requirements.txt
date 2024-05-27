@@ -3,6 +3,5 @@ numpy~=1.21.6
 backoff~=2.2.1
 setuptools~=65.6.3
 scikit-learn~=1.0.2
-tensorflow~=2.11.0
 scipy~=1.7.3
 openai~=1.30.2
