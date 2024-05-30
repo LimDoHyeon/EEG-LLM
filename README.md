@@ -1,5 +1,5 @@
 <h2>Fine-tuned GPT for Electroencephalography(EEG) data</h2>
-<p>This project aims to make GPT model for using EEG data more efficient.<br>I utilize fine-tuning and in-context learning methods for extracting useful insights.</p>
+<p>This is LLM Fine tuning model that classifies four movements (left arm, right arm, tongue, foot) from EEG.<br>Fine-tuning and In-context learning methods are used for extracting useful insights.</p>
 <br>
 <h2>Requirements</h2>
 <blockquote>!pip install -r requirements.txt</blockquote>
