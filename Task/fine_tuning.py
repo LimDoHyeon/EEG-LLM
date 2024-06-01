@@ -31,7 +31,7 @@ def save_to_jsonl(data, output_file):
             f.write('\n')
 
 # Function to perform fine-tuning
-@backoff.on_exception(backoff.expo, openai.error.RateLimitError)
+@backoff.on_exception(backoff.expo, openai.RateLimitError)
 def fine_tune_model(training_file):
     response = openai.File.create(
         file=open(training_file, 'rb'),
