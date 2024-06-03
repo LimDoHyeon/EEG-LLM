@@ -23,7 +23,7 @@ def calculate_fisher_ratio(data):
         overall_mean = mean_feature.mean()
         S_B = sum((mean_feature - overall_mean) ** 2) * (len(mean_feature) - 1)
         S_W = sum(std_feature ** 2)
-        fisher_ratio = S_B / S_W
+        fisher_ratio = S_B / S_W if S_W != 0 else 0  # zero division 방지
         fisher_ratios[col] = fisher_ratio
 
     return fisher_ratios
@@ -31,13 +31,13 @@ def calculate_fisher_ratio(data):
 
 def sort_fisher_ratios(fisher_ratios):
     """
-    Fisher Ratios를 오름차순으로 정렬하는 함수.
+    Fisher Ratios를 내림차순으로 정렬하는 함수.
 
     Parameters:
     fisher_ratios (dict): 각 특징에 대한 Fisher Ratio 딕셔너리.
 
     Returns:
-    dict: 오름차순으로 정렬된 Fisher Ratios 딕셔너리.
+    dict: 내림차순으로 정렬된 Fisher Ratios 딕셔너리.
     """
-    sorted_fisher_ratios = dict(sorted(fisher_ratios.items(), key=lambda item: item[1]))
+    sorted_fisher_ratios = dict(sorted(fisher_ratios.items(), key=lambda item: item[1], reverse=True))
     return sorted_fisher_ratios
