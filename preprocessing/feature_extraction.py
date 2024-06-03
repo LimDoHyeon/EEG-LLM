@@ -17,7 +17,7 @@ def compute_band_power(raw, band):
     data = raw.get_data()
     sfreq = raw.info['sfreq']
     data = data[:-1, :]  # 마지막 열은 라벨이므로 제외
-    psds, freqs = mne.time_frequency.psd_array_welch(data, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=2048)  # 전력 스펙트럼 밀도 계산
+    psds, freqs = mne.time_frequency.psd_array_welch(data, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=256)  # 전력 스펙트럼 밀도 계산
     # 주파수 대역의 전력 계산
     band_power = np.sum(psds, axis=-1)
     return band_power
