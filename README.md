@@ -19,7 +19,7 @@
     <li>performance measure: kappa-coefficient</li>
   </ul>
 <br>
-<p>Download : BBCI Competition III (https://www.bbci.de/competition/iii/download/index.html?agree=yes&submit=Submit)</p>
+<p><strong>Download</strong> : BBCI Competition III (https://www.bbci.de/competition/iii/download/index.html?agree=yes&submit=Submit)</p>
 
 <br>
 <h2>Features</h2>
