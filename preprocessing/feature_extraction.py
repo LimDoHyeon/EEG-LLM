@@ -8,24 +8,28 @@ Additional filtering is not required as the data is already preprocessed.
 
 
 def load_eeg_data(file_path):
-    data = pd.read_csv(file_path)
-    return data
+    data_src = pd.read_csv(file_path)
+    data = data_src.iloc[:, :-1]  # 마지막 열은 라벨이므로 제외
+    label = data_src.iloc[:, -1]  # 마지막 열은 라벨로 사용
+    return data, label
 
 
 def compute_band_power(raw, band):
     fmin, fmax = band  # 주파수 대역 설정
     data = raw.get_data()
     sfreq = raw.info['sfreq']
-    data = data[:-1, :]  # 마지막 열은 라벨이므로 제외
+    # data = data[:-1, :]  # 마지막 열은 라벨이므로 제외
     psds, freqs = mne.time_frequency.psd_array_welch(data, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=256)  # 전력 스펙트럼 밀도 계산
     # 주파수 대역의 전력 계산
     band_power = np.sum(psds, axis=-1)
     return band_power
 
 
-def extract_features(data, sfreq=250):
-    eeg_data = data.values  # 모든 열을 가져옴
-    ch_names = data.columns.tolist()  # 열 이름을 채널 이름으로 사용
+def extract_features(data, selected_features, sfreq=250):
+    # eeg_data = data.values  # 모든 열을 가져옴
+    # ch_names = data.columns.tolist()  # 열 이름을 채널 이름으로 사용
+    eeg_data = data.iloc[:, selected_features].values  # 선택된 열만 가져옴
+    ch_names = data.columns[selected_features].tolist()  # 선택된 열의 이름을 채널 이름으로 사용
     info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types='eeg')  # MNE의 Info 객체 생성
     raw = mne.io.RawArray(eeg_data.T, info)  # RawArray 객체 생성
 
@@ -49,6 +53,16 @@ def extract_features(data, sfreq=250):
         'Alpha:Delta Power Ratio': alpha_delta_ratio,
         'Theta:Alpha Power Ratio': theta_alpha_ratio,
         'Delta:Theta Power Ratio': delta_theta_ratio
-    })
+    }, index=selected_features)  # 선택된 열의 이름을 인덱스로 사용
 
-    return features.T
+    return features
+
+
+"""
+    # 피처 딕셔너리 생성
+    features = pd.DataFrame({
+        'Alpha:Delta Power Ratio': alpha_delta_ratio,
+        'Theta:Alpha Power Ratio': theta_alpha_ratio,
+        'Delta:Theta Power Ratio': delta_theta_ratio
+    })
+"""
