@@ -1,1 +1,5 @@
 Dataset
+.DS_Store
+preprocessing/__pycache__
+Task/__pycache__
+.idea
