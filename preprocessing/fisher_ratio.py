@@ -13,7 +13,7 @@ def calculate_fisher_ratio(data):
     list: 각 특징에 대한 Fisher Ratio 리스트.
     """
     features = []
-    for col in data.columns[:-1]:  # 마지막 열은 라벨
+    for col in data[:-1]:  # 마지막 열은 라벨
         mean_feature = data.groupby('label')[col].mean()
         std_feature = data.groupby('label')[col].std()
         features.append((col, mean_feature, std_feature))
