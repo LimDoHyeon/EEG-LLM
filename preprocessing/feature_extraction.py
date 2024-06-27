@@ -26,8 +26,6 @@ def compute_band_power(raw, band):
 
 
 def extract_features(data, selected_columns, sfreq=250):
-    # eeg_data = data.values  # 모든 열을 가져옴
-    # ch_names = data.columns.tolist()  # 열 이름을 채널 이름으로 사용
     eeg_data = data.iloc[:, selected_columns].values  # 선택된 열만 가져옴
     ch_names = data.columns[selected_columns].tolist()  # 선택된 열의 이름을 채널 이름으로 사용
     info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types='eeg')  # MNE의 Info 객체 생성
@@ -56,13 +54,3 @@ def extract_features(data, selected_columns, sfreq=250):
     }, index=selected_columns)  # 선택된 열의 이름을 인덱스로 사용
 
     return features
-
-
-"""
-    # 피처 딕셔너리 생성
-    features = pd.DataFrame({
-        'Alpha:Delta Power Ratio': alpha_delta_ratio,
-        'Theta:Alpha Power Ratio': theta_alpha_ratio,
-        'Delta:Theta Power Ratio': delta_theta_ratio
-    })
-"""
