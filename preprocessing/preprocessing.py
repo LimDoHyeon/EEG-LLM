@@ -33,10 +33,11 @@ def pipeline(csv_path, output_path, window_size, selected_columns):
 
     print(f"Data has been successfully saved to {output_path}")
 
-
+"""
 csv_path = 'your_csv_path'
 output_path = 'your_output_path'
 window_size = 1000
 selected_columns = [1, 4, 5, 7, 10]  # 사용할 EEG 채널 선택
 
 pipeline(csv_path, output_path, window_size, selected_columns)
+"""
