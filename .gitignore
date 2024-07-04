@@ -3,3 +3,4 @@ Dataset
 preprocessing/__pycache__
 Task/__pycache__
 .idea
+*.pyc
