@@ -54,3 +54,27 @@ def print_fisher_ratios(fisher_ratios):
             print("  ------- | ------------")
             for channel, ratio in sorted_items:
                 print(f"  {channel:7} | {ratio:.10f}")
+
+
+def main():
+    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/eeg_data_180000.csv')
+    df = rename_columns_to_numeric(df)
+    bands = {
+        'delta_band': (0.5, 4),
+        'theta_band': (4, 8),
+        'alpha_band': (8, 12)
+    }
+
+    # Assuming a sampling frequency (sfreq) for EEG data, which is typically 256 Hz
+    sfreq = 250
+
+    # Channel names should be the numeric column names as strings
+    channel_names = [str(i) for i in range(len(df.columns) - 1)]
+
+    # Calculate & sort Fisher Ratio
+    fisher_ratios = calculate_fisher_ratio(df, bands, sfreq, channel_names)
+    sorted_fisher_ratios = sort_fisher_ratios(fisher_ratios)
+    print_fisher_ratios(sorted_fisher_ratios)
+
+if __name__ == '__main__':
+    main()
