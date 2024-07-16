@@ -1,11 +1,12 @@
 """
-csv를 json으로 변환하기 위한 베이스 함수.
+csv를 json으로, json을 jsonl로 변환하기 위한 베이스 함수.
 """
 
 import pandas as pd
 import numpy as np
 import json
 import feature_extraction
+
 
 def csv_to_json(df, window_size, selected_columns, labels):
     """
@@ -54,3 +55,31 @@ def csv_to_json(df, window_size, selected_columns, labels):
         json_array.append(json_entry)
 
     return json_array
+
+
+def json_to_jsonl(json_dir, jsonl_dir):
+    """
+    JSON 파일을 JSONL 파일로 변환
+    :param json_dir: 불러올 JSON 파일 경로
+    :param jsonl_dir: 저장할 JSONL 파일 경로
+    """
+    json_data = load_json(json_dir)
+    save_to_jsonl(json_data, jsonl_dir)
+
+    print(f"Converted {json_dir} to {jsonl_dir}")
+
+
+# JSON 데이터를 로드하는 함수
+def load_json(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return json.load(file)
+
+
+# JSONL 파일로 저장하는 함수 (completion 값을 문자열로 변환)
+def save_to_jsonl(data, file_path):
+    with open(file_path, 'w', encoding='utf-8') as jsonl_file:
+        for entry in data:
+            # completion 값을 문자열로 변환
+            entry['completion'] = str(entry['completion'])
+            json.dump(entry, jsonl_file)
+            jsonl_file.write('\n')
