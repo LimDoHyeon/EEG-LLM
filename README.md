@@ -1,4 +1,4 @@
-<h2>Fine-tuned GPT for Electroencephalography(EEG) data</h2>
+<h2>Fine-tuned GPT for Electroencephalography(EEG) data classification</h2>
 <p>This is LLM Fine tuning model that classifies four movements (left arm, right arm, tongue, foot) from EEG.</p>
 <ul>
   <li>LLM performs its own classification operations based on EEG data.</li>
