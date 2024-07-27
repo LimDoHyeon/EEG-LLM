@@ -7,7 +7,7 @@
 4. 변환된 데이터를 지정된 경로에 저장
 5. 전처리된 json을 jsonl 형식으로 변환 및 저장
 """
-from csv_to_json import csv_to_json, json_to_jsonl
+from csv_to_json_4o import csv_to_json, json_to_jsonl
 from feature_extraction import load_eeg_data
 import pandas as pd
 import numpy as np
