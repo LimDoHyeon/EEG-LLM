@@ -37,8 +37,8 @@ def data_split(data, train_dir, test_dir):
 
 def main():
     df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/eeg_data_180000.csv')
-    train_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/train_data.csv'
-    test_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/test_data.csv'
+    train_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/train.csv'
+    test_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/test.csv'
     data_split(df, train_dir, test_dir)
 
 
