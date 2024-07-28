@@ -24,13 +24,13 @@ def csv_to_json(df, window_size, selected_columns, labels):
     json_array = []
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # DataFrame으로 윈도우 데이터 선택
+        window_data = df.iloc[start:start + window_size, selected_columns]  # Generate window based on selected columns
         label = labels[start]  # Assuming labels are provided for each window
 
-        features = feature_extraction.extract_features(window_data, list(range(len(selected_columns))))  # 인덱스를 사용하여 피처 추출
-        features_dict = features.to_dict('index')  # DataFrame을 딕셔너리 형태로 변환
+        features = feature_extraction.extract_features(window_data, list(range(len(selected_columns))))
+        features_dict = features.to_dict('index')  # Convert DataFrame to dictionary
 
-        # 새로운 형식의 features_dict_with_keys 생성
+        # Generate features_dict_with_keys
         features_dict_with_keys = {
             f"at channel {selected_columns[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
@@ -48,7 +48,7 @@ def csv_to_json(df, window_size, selected_columns, labels):
         combined_prompt = f"{prompt}\n{features_str}"
 
         json_entry = {
-            "prompt": combined_prompt,  # 끝에 불필요한 줄바꿈 제거
+            "prompt": combined_prompt,
             "completion": label
         }
 
@@ -61,12 +61,12 @@ def csv_to_json_without_label(df, window_size, selected_columns):
     json_array = []
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # DataFrame으로 윈도우 데이터 선택
+        window_data = df.iloc[start:start + window_size, selected_columns]  # Generate window based on selected columns
 
-        features = Preprocessing.feature_extraction.extract_features(window_data, list(range(len(selected_columns))))  # 인덱스를 사용하여 피처 추출
-        features_dict = features.to_dict('index')  # DataFrame을 딕셔너리 형태로 변환
+        features = Preprocessing.feature_extraction.extract_features(window_data, list(range(len(selected_columns))))
+        features_dict = features.to_dict('index')  # Convert DataFrame to dictionary
 
-        # 새로운 형식의 features_dict_with_keys 생성
+        # Generate features_dict_with_keys
         features_dict_with_keys = {
             f"at channel {selected_columns[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
@@ -100,13 +100,13 @@ def json_to_jsonl(json_dir, jsonl_dir):
     print(f"Converted {json_dir} to {jsonl_dir}")
 
 
-# JSON 데이터를 로드하는 함수
+# Function to load JSON file
 def load_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
 
-# JSONL 파일로 저장하는 함수 (completion 값을 문자열로 변환)
+# Function to save data to JSONL file
 def save_to_jsonl(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as jsonl_file:
         for entry in data:
