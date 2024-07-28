@@ -26,13 +26,21 @@ def data_split(data, train_dir, test_dir):
     for i in range(144, 180):
         test_data = pd.concat([test_data, data_list[i]])
 
+    # Drop the first column (index)
+    train_data = train_data.iloc[:, 1:]
+    test_data = test_data.iloc[:, 1:]
+
     # Save into csv files
     train_data.to_csv(train_dir, index=False)
     test_data.to_csv(test_dir, index=False)
 
 
 def main():
-    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/eeg_data_180000.csv')
-    train_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/train_data.csv'
-    test_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/test_data.csv'
+    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/eeg_data_180000.csv')
+    train_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/train_data.csv'
+    test_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/test_data.csv'
     data_split(df, train_dir, test_dir)
+
+
+if __name__ == '__main__':
+    main()
