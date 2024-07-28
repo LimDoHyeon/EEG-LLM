@@ -63,8 +63,8 @@ def train(training_file, val_file, model):
 
 
 def main():
-    train_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/train.jsonl'
-    val_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/val.jsonl'
+    train_jsonl_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/train.jsonl'
+    val_jsonl_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/val.jsonl'
 
     training_file = 'file-2YiEk0JyCbdZypIvwCjWROeV'
     val_file = ''
@@ -72,7 +72,7 @@ def main():
 
     window_size = 1000
     selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]
-    test_csv = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/test.csv'
+    test_csv = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
 
     create_file(train_jsonl_dir, val_jsonl_dir)
     train(training_file, val_file, model)

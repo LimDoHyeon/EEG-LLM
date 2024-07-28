@@ -42,10 +42,10 @@ def data_split(data, train_dir, val_dir, test_dir):
 
 
 def main():
-    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/eeg_data_180000.csv')
-    train_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/train.csv'
-    val_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/val.csv'
-    test_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/test.csv'
+    df = pd.read_csv('/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/eeg_data_180000.csv')
+    train_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/train.csv'
+    val_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/val.csv'
+    test_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
     data_split(df, train_dir, val_dir, test_dir)
 
 if __name__ == '__main__':
