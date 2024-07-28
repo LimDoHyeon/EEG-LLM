@@ -62,8 +62,8 @@ def train(training_file, test_file, model):
 
 
 def main():
-    train_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/jsonl/train.jsonl'
-    test_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/jsonl/test.jsonl'
+    train_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/train.jsonl'
+    test_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/test.jsonl'
     training_file = 'file-2YiEk0JyCbdZypIvwCjWROeV'
     test_file = 'file-cHnGZVujV9kZtKD5j26RPbek'
     model = 'davinci-002'

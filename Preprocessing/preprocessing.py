@@ -40,14 +40,14 @@ def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
 
 
 def main():
-    train_csv_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/train.csv'
-    test_csv_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/test.csv'
+    train_csv_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/train.csv'
+    test_csv_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/test.csv'
 
-    train_json_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/json/train.json'
-    train_jsonl_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/jsonl/train.jsonl'
+    train_json_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/train.json'
+    train_jsonl_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/train.jsonl'
 
-    test_json_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/json/test.json'
-    test_jsonl_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/jsonl/test.jsonl'
+    test_json_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/json/test.json'
+    test_jsonl_path = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/test.jsonl'
 
     window_size = 1000
     selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]  # 사용할 EEG 채널 선택

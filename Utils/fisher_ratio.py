@@ -57,7 +57,7 @@ def print_fisher_ratios(fisher_ratios):
 
 
 def main():
-    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-GPT/Dataset/eeg_data_180000.csv')
+    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/eeg_data_180000.csv')
     df = rename_columns_to_numeric(df)
     bands = {
         'delta_band': (0.5, 4),
