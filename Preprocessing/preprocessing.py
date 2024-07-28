@@ -1,11 +1,12 @@
 """
-파이프라인
-=================
-1. EEG 데이터의 csv 파일 로드
-2. 로드된 데이터 전처리 (feature_extraction.py 참조)
-3. 전처리된 데이터를 json 형식으로 변환 (csv_to_json.py 참조)
-4. 변환된 데이터를 지정된 경로에 저장
-5. 전처리된 json을 jsonl 형식으로 변환 및 저장
+Pipeline code for preprocessing EEG data
+This code preprocesses the EEG(csv) data and converts it to jsonl format at once.
+================================================
+1. Load the csv file of EEG data
+2. Preprocess the loaded data (refer to feature_extraction.py)
+3. Convert the preprocessed data to json format (refer to csv_to_json_4o.py)
+4. Save the converted data to the specified path
+5. Convert the preprocessed json to jsonl format and save it
 """
 from csv_to_json_4o import csv_to_json, json_to_jsonl
 from feature_extraction import load_eeg_data
@@ -16,27 +17,25 @@ import json
 
 def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
     """
-    csv 파일을 로드하고 전처리된 데이터를 json 형식으로 변환, json을 jsonl 형식으로 변환하여 저장하는 파이프라인
-
+    Load the EEG data csv file, convert the preprocessed data to json format, and convert the json to jsonl format and save it.
     :param csv_path:  EEG 데이터의 csv 파일 경로
     :param json_path:  전처리된 데이터를 저장할 json 파일 경로
     :param jsonl_path:  전처리된 데이터를 저장할 jsonl 파일 경로
     :param window_size:  EEG 데이터의 윈도우 사이즈
     :param selected_columns:  사용할 EEG 채널 선택
     """
-    # EEG 데이터의 csv 파일 로드
+    # EEG(csv) load
     data, label = load_eeg_data(csv_path)
 
-    # 로드된 데이터 전처리 및 전처리된 데이터를 json 형식으로 변환
+    # Preprocess the loaded data and convert it to json format
     json_data = csv_to_json(data, window_size, selected_columns, label)
 
-    # json 형식으로 변환된 데이터를 지정된 경로에 저장
+    # Save the converted data to the specified path
     with open(json_path, 'w') as json_file:
         json.dump(json_data, json_file, indent=4)
-
     print(f"Data has been successfully saved to {json_path}")
 
-    # 전처리된 json을 jsonl 형식으로 변환 및 저장
+    # Convert the preprocessed json to jsonl format and save it
     json_to_jsonl(json_path, jsonl_path)
 
 
