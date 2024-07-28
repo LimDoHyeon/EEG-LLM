@@ -68,12 +68,12 @@ def csv_to_json_without_label(df, window_size, selected_columns):
     json_array = []
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # DataFrame으로 윈도우 데이터 선택
+        window_data = df.iloc[start:start + window_size, selected_columns]  # Generate a window based on selected_columns
 
-        features = extract_features(window_data, list(range(len(selected_columns))))  # 인덱스를 사용하여 피처 추출
-        features_dict = features.to_dict('index')  # DataFrame을 딕셔너리 형태로 변환
+        features = extract_features(window_data, list(range(len(selected_columns))))
+        features_dict = features.to_dict('index')  # Convert the DataFrame to a dictionary
 
-        # features_dict_with_keys 생성
+        # Generate features_dict_with_keys
         features_dict_with_keys = {
             f"at channel {selected_columns[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
@@ -82,10 +82,10 @@ def csv_to_json_without_label(df, window_size, selected_columns):
             ] for i in range(len(selected_columns))
         }
 
-        # GPT 역할 설정
+        # Set the GPT role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
 
-        # 질의 프롬프트
+        # Prompt
         prompt = f"Quantitative EEG: In a {window_size / 250} second period,"
         features_str = ""
         for key, value in features_dict_with_keys.items():
@@ -118,7 +118,7 @@ def json_to_jsonl(json_dir, jsonl_dir):
     print(f"Converted {json_dir} to {jsonl_dir}")
 
 
-# JSON 데이터를 로드하는 함수
+# Load JSON file
 def load_json(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
@@ -128,7 +128,6 @@ def load_json(file_path):
 def save_to_jsonl(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as jsonl_file:
         for entry in data:
-            # completion 값을 문자열로 변환
-            entry['completion'] = str(entry['completion'])
-            json.dump(entry, jsonl_file)
-            jsonl_file.write('\n')
+            jsonl_line = json.dumps(entry, ensure_ascii=False)
+            jsonl_file.write(jsonl_line + '\n')
+
