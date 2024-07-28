@@ -7,3 +7,4 @@ scipy~=1.7.3
 openai~=1.30.2
 mne~=1.6.1
 matplotlib~=3.7.5
+setuptools~=70.0.0
