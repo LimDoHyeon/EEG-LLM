@@ -11,14 +11,14 @@ def data_split(data, train_dir, test_dir):
     :param train_dir: 훈련 데이터 저장 경로
     :param test_dir: 테스트 데이터 저장 경로
     """
-    # 데이터를 1000개 단위로 묶어 배열에 저장
+    # Save the data in an array in units of 1000
     data_list = []
     for i in range(0, 180000, 1000):
         data_list.append(data.iloc[i:i + 1000])
 
     random.shuffle(data_list)
 
-    # 섞인 총 180개 인덱스의 80%를 훈련 데이터로, 20%를 테스트 데이터로 사용
+    # Use 80% of the shuffled indices as training data and 20% as test data
     train_data = pd.DataFrame()
     test_data = pd.DataFrame()
     for i in range(0, 144):
@@ -26,7 +26,7 @@ def data_split(data, train_dir, test_dir):
     for i in range(144, 180):
         test_data = pd.concat([test_data, data_list[i]])
 
-    # csv 파일로 저장
+    # Save into csv files
     train_data.to_csv(train_dir, index=False)
     test_data.to_csv(test_dir, index=False)
 
