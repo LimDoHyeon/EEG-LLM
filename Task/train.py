@@ -12,14 +12,15 @@ import os
 from openai import OpenAI
 import openai
 import json
+from Preprocessing.feature_extraction import load_eeg_data
 
 
-def create_file(train_jsonl_dir, test_jsonl_dir):
+def create_file(train_jsonl_dir, val_jsonl_dir):
     """
     Create a file in the OpenAI API
     After creating the file, you should see the file ID(train/test) in the website(platform.openai.com).
     :param train_jsonl_dir: A directory of the train data in jsonl format
-    :param test_jsonl_dir: A directory of the test data in jsonl format
+    :param val_jsonl_dir: A directory of the test data in jsonl format
     :return:
     """
     # load train data
@@ -29,26 +30,26 @@ def create_file(train_jsonl_dir, test_jsonl_dir):
     )
     print(f"Loaded {train_jsonl_dir}")
 
-    # load test data
+    # load validation data
     client.files.create(
-        file=open(test_jsonl_dir, 'rb'),
+        file=open(val_jsonl_dir, 'rb'),
         purpose='fine-tune'
     )
-    print(f"Loaded {test_jsonl_dir}")
+    print(f"Loaded {val_jsonl_dir}")
 
 
-def train(training_file, test_file, model):
+def train(training_file, val_file, model):
     """
     Fine-tuning the GPT model.
     After training, you should check the name of the model in the website(platform.openai.com).
     :param training_file: The ID of the training file
-    :param test_file: The ID of the test file
+    :param val_file: The ID of the validation file
     :param model: anything you want(davinci-002 / gpt-3.5-turbo / and so on)
     """
     # start fine-tuning
     client.fine_tuning.jobs.create(
         training_file=training_file,
-        validation_file=test_file,
+        validation_file=val_file,
         model=model
         # hyperparameters는 default=auto 이므로 설정하지 않음
         # hyperparameters={
@@ -63,14 +64,22 @@ def train(training_file, test_file, model):
 
 def main():
     train_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/train.jsonl'
-    test_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/test.jsonl'
+    val_jsonl_dir = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/jsonl/val.jsonl'
+
     training_file = 'file-2YiEk0JyCbdZypIvwCjWROeV'
-    test_file = 'file-cHnGZVujV9kZtKD5j26RPbek'
+    val_file = ''
     model = 'davinci-002'
 
-    create_file(train_jsonl_dir, test_jsonl_dir)
-    train(training_file, test_file, model)
+    window_size = 1000
+    selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]
+    test_csv = '/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/test.csv'
 
+    create_file(train_jsonl_dir, val_jsonl_dir)
+    train(training_file, val_file, model)
+
+    # Evaluate the fine-tuned model
+    data, label = load_eeg_data(test_csv)
+    evaluate(data, label, window_size, selected_columns)
 
 
 if __name__ == '__main__':
