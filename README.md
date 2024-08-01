@@ -2,13 +2,13 @@
 <p>This is LLM Fine tuning model that classifies four movements (left arm, right arm, tongue, foot) from EEG.</p>
 <ul>
   <li>LLM performs its own classification operations based on EEG data.</li>
-  <li>Fine-tuning and In-context learning methods are used for better performance.</li>
-  <li>In this project, extra ML model is used for measuring performance since the data we used has no label(NaN) on their test set.</li>
+  <li>We trained gpt-4o model utilizing fine-tuning for better performance.</li>
 </ul>
 <img width="952" alt="EEG-GPT pipiline" src="https://github.com/LimDoHyeon/EEG-GPT/assets/94499717/fa86e248-801a-49b1-a46c-9c28d38610c8">
 
 <br>
 <h2>Requirements</h2>
+<p><strong>Python>=3.8,   openai>=1.30.2,   mne>=1.6.1</strong><br>You can install all libraries entering the code: </p>
 <blockquote>!pip install -r requirements.txt</blockquote>
 <br>
 <h2>Data</h2>
@@ -24,17 +24,25 @@
 <br>
 <h2>Features</h2>
 <p>The following four features were used: </p>
-<ul>
+<ul><strong>
   <li>alpha:delta power ratio</li>
   <li>theta:alpha power ratio</li>
   <li>delta:theta power ratio</li>
-  <li>fisher ratio</li>
-</ul>
+</ul></strong>
+<p>And for feature selection, <strong>Fisher Ratio</strong> is utilized.</p>
+<p>(PSD plot here)</p>
 
 
 <br>
 <h2>Evaluation</h2>
-<p><strong>Cohen's Kappa Coefficient</strong></p>
+<p>Performance metrics:
+<ul>
+  <li><strong>Accuracy</strong></li>
+  <li><strong>F1 score</strong></li>
+  <li><strong>Cohen's Kappa Coefficient</strong></li>
+</ul>
+<p>(Metrics plot here)</p>
+</p>
 
 <br>
 <h2>Reference</h2>
