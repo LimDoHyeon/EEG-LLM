@@ -18,11 +18,11 @@ import json
 def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
     """
     Load the EEG data csv file, convert the preprocessed data to json format, and convert the json to jsonl format and save it.
-    :param csv_path:  EEG 데이터의 csv 파일 경로
-    :param json_path:  전처리된 데이터를 저장할 json 파일 경로
-    :param jsonl_path:  전처리된 데이터를 저장할 jsonl 파일 경로
-    :param window_size:  EEG 데이터의 윈도우 사이즈
-    :param selected_columns:  사용할 EEG 채널 선택
+    :param csv_path:  EEG data csv file path
+    :param json_path:  json file path to save the preprocessed data
+    :param jsonl_path:  jsonl file path to save the preprocessed data
+    :param window_size:  window size of EEG data
+    :param selected_columns:  EEG channel to use
     """
     # EEG(csv) load
     data, label = load_eeg_data(csv_path)
@@ -54,7 +54,7 @@ def main():
     test_jsonl_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/test.jsonl'
 
     window_size = 1000
-    selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]  # 사용할 EEG 채널 선택
+    selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]  # EEG channels to use
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
