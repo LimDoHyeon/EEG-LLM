@@ -18,11 +18,12 @@ def use_model(msg):
 
 def evaluate(data, label, window_size, selected_columns):
     """
-    1. test 데이터(csv) 파라미터로 받음
-    2. 전처리 후 json 형태로 변환하여, 한 task씩 gpt에 입력
-    3. gpt의 completion을 버퍼에 저장
-    4. 버퍼의 completion을 모아서 실제 라벨과 함께 F1 Score, Kappa Coefficient에 입력
-    5. 결과 출력
+    Process :
+    1. Receive test data (csv) as a parameter
+    2. Preprocess and convert it into json format, input it into gpt one task at a time
+    3. Save the completion of gpt to the buffer
+    4. Collect the completions in the buffer and input them into F1 Score and Kappa Coefficient with the actual label
+    5. Print the result
     """
     model_pred = []
 

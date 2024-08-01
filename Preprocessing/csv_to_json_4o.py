@@ -1,5 +1,5 @@
 """
-csv를 json으로, json을 jsonl로 변환하기 위한 베이스 함수.
+Base functions for converting csv to json, json to jsonl.
 """
 
 import pandas as pd
@@ -12,25 +12,25 @@ def csv_to_json(df, window_size, selected_columns, labels):
     """
     Convert a DataFrame of EEG data into a JSON format suitable for GPT-3 davinci.
     =================================
-    1. selected_columns 구체적인 선택 필요
+    1. You should pick selected_columns before run this function.
     2. It contains the process of feature extraction.
     =================================
-    :param df: 원본 csv 파일을 pandas DataFrame으로 변환한 데이터
-    :param window_size: EEG 데이터를 나눌 윈도우 크기
-    :param selected_columns: 사용할 EEG 채널 (리스트 제공)
-    :param labels: 각 윈도우에 대한 라벨 (리스트 제공, left, right, top, bottom)
-    :return: JSON 형식의 데이터 리스트
+    :param df: Data converted to pandas DataFrame from the original csv file
+    :param window_size: Window size to divide EEG data
+    :param selected_columns: EEG channel to use (provide a list)
+    :param labels: Label for each window (provide a list, left, right, top, bottom)
+    :return: List of data in JSON format
     """
     json_array = []
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # DataFrame으로 윈도우 데이터 선택
+        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
         label = labels[start]  # Assuming labels are provided for each window
 
-        features = extract_features(window_data, list(range(len(selected_columns))))  # 인덱스를 사용하여 피처 추출
-        features_dict = features.to_dict('index')  # DataFrame을 딕셔너리 형태로 변환
+        features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
+        features_dict = features.to_dict('index')  # DataFrame to dictionary
 
-        # features_dict_with_keys 생성
+        # Generate features_dict_with_keys
         features_dict_with_keys = {
             f"at channel {selected_columns[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
@@ -39,10 +39,10 @@ def csv_to_json(df, window_size, selected_columns, labels):
             ] for i in range(len(selected_columns))
         }
 
-        # GPT 역할 설정
+        # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
 
-        # 질의 프롬프트
+        # Prompt explaining the feature information
         prompt = f"Quantitative EEG: In a {window_size / 250} second period,"
         features_str = ""
         for key, value in features_dict_with_keys.items():
@@ -51,6 +51,7 @@ def csv_to_json(df, window_size, selected_columns, labels):
             features_str += "\n"
         combined_prompt = f"{prompt}\n{features_str}"
 
+        # Convert the data to JSON format
         json_entry = {
             "messages": [
                 {"role": "system", "content": system_message},
@@ -68,10 +69,10 @@ def csv_to_json_without_label(df, window_size, selected_columns):
     json_array = []
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # Generate a window based on selected_columns
+        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
 
-        features = extract_features(window_data, list(range(len(selected_columns))))
-        features_dict = features.to_dict('index')  # Convert the DataFrame to a dictionary
+        features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
+        features_dict = features.to_dict('index')  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
         features_dict_with_keys = {
@@ -82,10 +83,10 @@ def csv_to_json_without_label(df, window_size, selected_columns):
             ] for i in range(len(selected_columns))
         }
 
-        # Set the GPT role
+        # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
 
-        # Prompt
+        # Prompt explaining the feature information
         prompt = f"Quantitative EEG: In a {window_size / 250} second period,"
         features_str = ""
         for key, value in features_dict_with_keys.items():
@@ -94,6 +95,7 @@ def csv_to_json_without_label(df, window_size, selected_columns):
             features_str += "\n"
         combined_prompt = f"{prompt}\n{features_str}"
 
+        # Convert the data to JSON format
         json_entry = {
             "messages": [
                 {"role": "system", "content": system_message},
@@ -108,9 +110,9 @@ def csv_to_json_without_label(df, window_size, selected_columns):
 
 def json_to_jsonl(json_dir, jsonl_dir):
     """
-    JSON 파일을 JSONL 파일로 변환
-    :param json_dir: 불러올 JSON 파일 경로
-    :param jsonl_dir: 저장할 JSONL 파일 경로
+    Convert JSON file to JSONL file
+    :param json_dir: JSON file path to load
+    :param jsonl_dir: JSONL file path to save
     """
     json_data = load_json(json_dir)
     save_to_jsonl(json_data, jsonl_dir)
@@ -124,7 +126,7 @@ def load_json(file_path):
         return json.load(file)
 
 
-# JSONL 파일로 저장하는 함수 (completion 값을 문자열로 변환)
+# Function to save as JSONL file (convert completion value to string)
 def save_to_jsonl(data, file_path):
     with open(file_path, 'w', encoding='utf-8') as jsonl_file:
         for entry in data:
