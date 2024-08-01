@@ -30,7 +30,7 @@
   <li>delta:theta power ratio</li>
 </ul></strong>
 <p>And for feature selection, <strong>Fisher Ratio</strong> is utilized.</p>
-<p>(PSD plot here)</p>
+<p>(PSD plot will be here)</p>
 
 
 <br>
@@ -41,7 +41,7 @@
   <li><strong>F1 score</strong></li>
   <li><strong>Cohen's Kappa Coefficient</strong></li>
 </ul>
-<p>(Metrics plot here)</p>
+<p>(Metrics plot will be here)</p>
 </p>
 
 <br>
