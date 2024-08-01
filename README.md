@@ -23,7 +23,7 @@
 
 <br>
 <h2>Features</h2>
-<p>The following four features were used: </p>
+<p>The following three features were used: </p>
 <ul><strong>
   <li>alpha:delta power ratio</li>
   <li>theta:alpha power ratio</li>
