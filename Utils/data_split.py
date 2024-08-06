@@ -48,5 +48,6 @@ def main():
     test_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
     data_split(df, train_dir, val_dir, test_dir)
 
+
 if __name__ == '__main__':
     main()
