@@ -71,7 +71,7 @@ def main():
     model = 'davinci-002'
 
     window_size = 1000
-    selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]
+    selected_columns = [10, 13, 16, 28, 31, 34, 46, 49, 52]
     test_csv = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
 
     create_file(train_jsonl_dir, val_jsonl_dir)

@@ -54,7 +54,7 @@ def main():
     test_jsonl_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/test.jsonl'
 
     window_size = 1000
-    selected_columns = [0, 7, 8, 14, 15, 20, 30, 35, 37, 38, 43, 44, 45, 54, 58]  # EEG channels to use
+    selected_columns = [10, 13, 16, 28, 31, 34, 46, 49, 52]  # EEG channels to use, selected by fisher ratio
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
