@@ -1,80 +1,71 @@
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 import numpy as np
-import mne
 
-def rename_columns_to_numeric(data):
-    new_columns = {col: str(i) for i, col in enumerate(data.columns)}
-    new_columns[data.columns[-1]] = data.columns[-1]
-    data.rename(columns=new_columns, inplace=True)
-    return data
+# CSV 파일 로드
+df = pd.read_csv('psd_results_2Hz.csv')
 
-def calculate_fisher_ratio(data, bands, sfreq, channel_names):
-    fisher_ratios = {label: {band: {} for band in bands} for label in data['label'].unique()}
+# Fisher Ratio 계산 함수
+def calculate_fisher_ratios(df):
+    fisher_ratios = []
 
-    labels = data['label'].values
-    data_values = data.drop(columns=['label']).values
+    target_labels = [1, 2, 3, 4]  # 움직임 상상 레이블
+    rest_label = 5  # rest 상태 레이블
 
-    for band_name, (low_freq, high_freq) in bands.items():
-        band_data = mne.filter.filter_data(data_values.T, sfreq, l_freq=low_freq, h_freq=high_freq).T
-        band_data = pd.DataFrame(band_data, columns=channel_names)
-        band_data['label'] = labels
+    for target_label in target_labels:
+        # 특정 레이블의 데이터
+        target_data = df[df['Label'] == target_label]
+        # rest 레이블의 데이터
+        rest_data = df[df['Label'] == rest_label]
 
-        for label in band_data['label'].unique():
-            label_data = band_data[band_data['label'] == label]
-            features = []
-            for col in label_data.drop(columns=['label']):
-                mean_feature = label_data[col].mean()
-                std_feature = label_data[col].std()
-                features.append((col, mean_feature, std_feature))
+        for channel in target_data['Channel'].unique():
+            for freq_band in target_data['Frequency_Band'].unique():
+                # 특정 레이블(target_label)의 평균 및 분산
+                target_mean = target_data[(target_data['Channel'] == channel) & (target_data['Frequency_Band'] == freq_band)]['Mean_PSD'].values[0]
+                target_variance = target_data[(target_data['Channel'] == channel) & (target_data['Frequency_Band'] == freq_band)]['Variance_PSD'].values[0]
 
-            for col, mean_feature, std_feature in features:
-                overall_mean = band_data[col].mean()
-                S_B = (mean_feature - overall_mean) ** 2
-                S_W = std_feature ** 2
-                fisher_ratio = S_B / S_W if S_W != 0 else 0
-                fisher_ratios[label][band_name][col] = fisher_ratio
+                # rest 레이블의 평균 및 분산
+                rest_mean = rest_data[(rest_data['Channel'] == channel) & (rest_data['Frequency_Band'] == freq_band)]['Mean_PSD']
+                rest_variance = rest_data[(rest_data['Channel'] == channel) & (rest_data['Frequency_Band'] == freq_band)]['Variance_PSD']
 
-    return fisher_ratios
+                if not rest_mean.empty and not rest_variance.empty:
+                    rest_mean = rest_mean.values[0]
+                    rest_variance = rest_variance.values[0]
 
-def sort_fisher_ratios(fisher_ratios):
-    sorted_fisher_ratios = {}
-    for label in fisher_ratios:
-        sorted_fisher_ratios[label] = {}
-        for band in fisher_ratios[label]:
-            sorted_fisher_ratios[label][band] = dict(sorted(fisher_ratios[label][band].items(), key=lambda item: item[1], reverse=True))
-    return sorted_fisher_ratios
+                    # Fisher Ratio 계산
+                    fisher_ratio = (rest_mean - target_mean) ** 2 / ((rest_variance) ** 2 + (target_variance) ** 2)
 
-def print_fisher_ratios(fisher_ratios):
-    for label in fisher_ratios:
-        print(f"\nLabel {label}:")
-        for band in fisher_ratios[label]:
-            print(f"\n  {band} band:")
-            sorted_items = sorted(fisher_ratios[label][band].items(), key=lambda x: x[1], reverse=True)
-            print("  Channel | Fisher Ratio")
-            print("  ------- | ------------")
-            for channel, ratio in sorted_items:
-                print(f"  {channel:7} | {ratio:.10f}")
+                    fisher_ratios.append({
+                        'Label': target_label,
+                        'Channel': channel,
+                        'Frequency_Band': freq_band,
+                        'Fisher_Ratio': fisher_ratio
+                    })
 
+    return pd.DataFrame(fisher_ratios)
 
-def main():
-    df = pd.read_csv('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Dataset/eeg_data_180000.csv')
-    df = rename_columns_to_numeric(df)
-    bands = {
-        'delta_band': (0.5, 4),
-        'theta_band': (4, 8),
-        'alpha_band': (8, 12)
-    }
+# Fisher Ratio 계산
+fisher_df = calculate_fisher_ratios(df)
 
-    # Assuming a sampling frequency (sfreq) for EEG data, which is typically 256 Hz
-    sfreq = 250
+# Fisher Ratio 결과를 CSV 파일로 저장
+fisher_df.to_csv('fisher_ratios.csv', index=False)
+print("Fisher ratios saved to 'fisher_ratios.csv'")
 
-    # Channel names should be the numeric column names as strings
-    channel_names = [str(i) for i in range(len(df.columns) - 1)]
+# Fisher Ratio 히트맵 플로팅 함수
+def plot_fisher_ratios(fisher_df):
+    labels = fisher_df['Label'].unique()
+    
+    for label in labels:
+        label_fisher_df = fisher_df[fisher_df['Label'] == label]
+        pivot_table = label_fisher_df.pivot_table(index=['Channel'], columns='Frequency_Band', values='Fisher_Ratio')
 
-    # Calculate & sort Fisher Ratio
-    fisher_ratios = calculate_fisher_ratio(df, bands, sfreq, channel_names)
-    sorted_fisher_ratios = sort_fisher_ratios(fisher_ratios)
-    print_fisher_ratios(sorted_fisher_ratios)
+        plt.figure(figsize=(12, 8))
+        sns.heatmap(pivot_table, cmap='jet', annot=False)
+        plt.title(f'Fisher Ratio Heatmap for Label {label} vs Rest')
+        plt.xlabel('Frequency Band')
+        plt.ylabel('Channel')
+        plt.show()
 
-if __name__ == '__main__':
-    main()
+# Plot Fisher Ratio heatmaps
+plot_fisher_ratios(fisher_df)
