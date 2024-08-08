@@ -40,21 +40,23 @@ def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
 
 
 def main():
-    train_csv_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/train.csv'
-    val_csv_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/val.csv'
-    test_csv_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
+    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
 
-    train_json_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/json/train.json'
-    train_jsonl_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/train.jsonl'
+    train_csv_path = base_path + 'train.csv'
+    val_csv_path = base_path + 'val.csv'
+    test_csv_path = base_path + 'test.csv'
 
-    val_json_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/json/val.json'
-    val_jsonl_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/val.jsonl'
+    train_json_path = base_path + '4ch/json/train.json'
+    train_jsonl_path = base_path + '4ch/jsonl/train.jsonl'
 
-    test_json_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/json/test.json'
-    test_jsonl_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/jsonl/test.jsonl'
+    val_json_path = base_path + '4ch/json/val.json'
+    val_jsonl_path = base_path + '4ch/jsonl/val.jsonl'
+
+    test_json_path = base_path + '4ch/json/test.json'
+    test_jsonl_path = base_path + '4ch/jsonl/test.jsonl'
 
     window_size = 1000
-    selected_columns = [10, 13, 16, 28, 31, 34, 46, 49, 52]  # EEG channels to use, selected by fisher ratio
+    selected_columns = [13, 28, 31, 34]  # EEG channels to use, selected by fisher ratio
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
