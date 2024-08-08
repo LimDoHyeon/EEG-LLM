@@ -25,7 +25,8 @@ def csv_to_json(df, window_size, selected_columns, labels):
 
     for start in range(0, len(df) - window_size + 1, window_size):
         window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
-        label = labels[start]  # Assuming labels are provided for each window
+        label = int(labels[start])  # Assuming labels are provided for each window
+        label = str(label)
 
         features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
         features_dict = features.to_dict('index')  # DataFrame to dictionary
