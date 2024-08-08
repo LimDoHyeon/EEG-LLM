@@ -44,23 +44,24 @@ def main():
 
     train_csv_path = base_path + 'train.csv'
     val_csv_path = base_path + 'val.csv'
-    test_csv_path = base_path + 'test.csv'
+    # test_csv_path = base_path + 'test.csv'
 
-    train_json_path = base_path + '4ch/json/train.json'
-    train_jsonl_path = base_path + '4ch/jsonl/train.jsonl'
+    train_json_path = base_path + '9ch/json/train.json'
+    train_jsonl_path = base_path + '9ch/jsonl/train.jsonl'
 
-    val_json_path = base_path + '4ch/json/val.json'
-    val_jsonl_path = base_path + '4ch/jsonl/val.jsonl'
+    val_json_path = base_path + '9ch/json/val.json'
+    val_jsonl_path = base_path + '9ch/jsonl/val.jsonl'
 
-    test_json_path = base_path + '4ch/json/test.json'
-    test_jsonl_path = base_path + '4ch/jsonl/test.jsonl'
+    # test_json_path = base_path + '4ch/json/test.json'
+    # test_jsonl_path = base_path + '4ch/jsonl/test.jsonl'
 
     window_size = 1000
-    selected_columns = [13, 28, 31, 34]  # EEG channels to use, selected by fisher ratio
+    # selected_columns = [13, 28, 31, 34]  # EEG channels to use, selected by fisher ratio , 4ch
+    selected_columns = [10, 13, 16, 28, 31, 34, 46, 49, 52]  # EEG channels to use, selected by fisher ratio , 9ch
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
-    pipeline(test_csv_path, test_json_path, test_jsonl_path, window_size, selected_columns)
+    # pipeline(test_csv_path, test_json_path, test_jsonl_path, window_size, selected_columns)
 
 
 if __name__ == '__main__':
