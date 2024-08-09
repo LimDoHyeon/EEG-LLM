@@ -1,3 +1,8 @@
+"""
+Author: Do-Hyeon Lim
+This code is for concatenating label in data.
+"""
+
 import pandas as pd
 import numpy as np
 

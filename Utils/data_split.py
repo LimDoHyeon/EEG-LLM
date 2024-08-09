@@ -1,3 +1,8 @@
+"""
+Author: Do-Hyeon Lim
+This code is for splitting data into train, validation, and test data.
+"""
+
 import pandas as pd
 import random
 
