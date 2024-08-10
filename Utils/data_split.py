@@ -47,10 +47,11 @@ def data_split(data, train_dir, val_dir, test_dir):
 
 
 def main():
-    df = pd.read_csv('/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/eeg_data_180000.csv')
-    train_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/train.csv'
-    val_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/val.csv'
-    test_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/test.csv'
+    base_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
+    df = pd.read_csv(base_dir + 'laf_eeg_data_180000.csv')
+    train_dir = base_dir + 'train.csv'
+    val_dir = base_dir + 'val.csv'
+    test_dir = base_dir + 'test.csv'
     data_split(df, train_dir, val_dir, test_dir)
 
 
