@@ -23,8 +23,12 @@ def csv_to_json(df, window_size, selected_columns, labels):
     """
     json_array = []
 
+    # EEG 채널 이름을 selected_columns에 매핑합니다.
+    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 1, 3, 4, 5에 대응
+
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
+        window_data = df.iloc[start:start + window_size,
+                      selected_columns]  # Pick a single window based on selected_columns
         label = int(labels[start])  # Assuming labels are provided for each window
         label = str(label)
 
@@ -33,7 +37,7 @@ def csv_to_json(df, window_size, selected_columns, labels):
 
         # Generate features_dict_with_keys
         features_dict_with_keys = {
-            f"at channel {selected_columns[i]}": [
+            f"at channel {channel_names[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
                 f"Theta:Alpha Power Ratio: {features_dict[i]['Theta:Alpha Power Ratio']}",
                 f"Delta:Theta Power Ratio: {features_dict[i]['Delta:Theta Power Ratio']}"
@@ -69,15 +73,19 @@ def csv_to_json(df, window_size, selected_columns, labels):
 def csv_to_json_without_label(df, window_size, selected_columns):
     json_array = []
 
+    # EEG 채널 이름을 selected_columns에 매핑합니다.
+    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 1, 3, 4, 5에 대응
+
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
+        window_data = df.iloc[start:start + window_size,
+                      selected_columns]  # Pick a single window based on selected_columns
 
         features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
         features_dict = features.to_dict('index')  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
         features_dict_with_keys = {
-            f"at channel {selected_columns[i]}": [
+            f"at channel {channel_names[i]}": [
                 f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
                 f"Theta:Alpha Power Ratio: {features_dict[i]['Theta:Alpha Power Ratio']}",
                 f"Delta:Theta Power Ratio: {features_dict[i]['Delta:Theta Power Ratio']}"
