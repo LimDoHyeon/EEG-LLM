@@ -50,11 +50,10 @@ def main():
     base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
     test_csv = base_path + 'test.csv'
     window_size = 1000
-    # selected_columns = [13, 28, 31, 34]  # 4ch
-    selected_columns = [10, 13, 16, 28, 31, 34, 46, 49, 52]  # 9ch
+    selected_columns = [1, 3, 4, 5]  # 4ch
 
     # Evaluate the fine-tuned model
-    model_id = 'your_model_id'  # Fine-tuned model id (check it in the openai dashboard)
+    model_id = 'ft:gpt-3.5-turbo-1106:personal::9ubj234q'  # Fine-tuned model id (check it in the openai dashboard)
 
     data, label = load_eeg_data(test_csv)
     evaluate(data, label, window_size, selected_columns, model_id)
