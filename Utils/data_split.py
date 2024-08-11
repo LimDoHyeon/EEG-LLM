@@ -19,7 +19,7 @@ def data_split(data, train_dir, val_dir, test_dir):
     """
     # Save the data in an array in units of 1000
     data_list = []
-    for i in range(0, 180000, 1000):
+    for i in range(0, 360000, 1000):
         data_list.append(data.iloc[i:i + 1000])
 
     random.shuffle(data_list)
@@ -28,11 +28,11 @@ def data_split(data, train_dir, val_dir, test_dir):
     train_data = pd.DataFrame()
     test_data = pd.DataFrame()
     val_data = pd.DataFrame()
-    for i in range(0, 108):
+    for i in range(0, 216):
         train_data = pd.concat([train_data, data_list[i]])
-    for i in range(108, 144):
+    for i in range(216, 288):
         val_data = pd.concat([val_data, data_list[i]])
-    for i in range(144, 180):
+    for i in range(288, 360):
         test_data = pd.concat([test_data, data_list[i]])
 
     # Drop the first column (index)
@@ -48,7 +48,7 @@ def data_split(data, train_dir, val_dir, test_dir):
 
 def main():
     base_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
-    df = pd.read_csv(base_dir + 'laf_eeg_data_180000.csv')
+    df = pd.read_csv(base_dir + 'laf_eeg_data_9ch_360000.csv')
     train_dir = base_dir + 'train.csv'
     val_dir = base_dir + 'val.csv'
     test_dir = base_dir + 'test.csv'
