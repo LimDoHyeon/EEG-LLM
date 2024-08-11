@@ -1,6 +1,5 @@
 <h2>Preprocessing</h2>
 <p>The files in this folder are scripts designed to perform feature extraction on scaled and Laplacian-filtered CSV data, and then save the results in JSON and JSONL formats.</p>
-<br>
 <ul>
   <li><strong>feature_extraction.py</strong>: This script calculates the Power Spectral Density (PSD) based on the input data and selected columns, and uses it to compute the
     <ul>
