@@ -56,8 +56,8 @@ def main():
     # test_jsonl_path = base_path + 'selected/jsonl/test.jsonl'
 
     window_size = 1000
-    # FCz=1, C3=3, Cz=4, C4=5
-    selected_columns = [1, 3, 4, 5]  # EEG channels to use, selected by fisher ratio
+    # FCz=0, C3=2, Cz=3, C4=4
+    selected_columns = [0, 2, 3, 4]  # EEG channels to use, selected by fisher ratio
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
