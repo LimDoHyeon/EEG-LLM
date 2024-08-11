@@ -5,90 +5,90 @@ from data_split_chunk import preprocess_data, split_data_into_chunks, ch_names, 
 
 def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, fmin=4, fmax=36, output_csv='psd_results_2Hz.csv'):
     """
-    각 레이블의 데이터 조각에 대해 PSD를 계산하고 결과를 CSV 파일로 저장하는 함수
+    Function to calculate PSD for chunks of data for each label and save the results to a CSV file.
 
-    :param eeg_raw_split: 레이블별 데이터 조각 리스트
-    :param ch_names: 채널 이름 리스트
-    :param ch_types: 채널 타입 리스트
-    :param sampling_freq: 샘플링 주파수
-    :param fmin: PSD 계산의 최소 주파수 (Hz)
-    :param fmax: PSD 계산의 최대 주파수 (Hz)
-    :param output_csv: 결과를 저장할 CSV 파일 이름
+    :param eeg_raw_split: List of data chunks split by labels
+    :param ch_names: List of channel names
+    :param ch_types: List of channel types
+    :param sampling_freq: Sampling frequency
+    :param fmin: Minimum frequency for PSD calculation (Hz)
+    :param fmax: Maximum frequency for PSD calculation (Hz)
+    :param output_csv: Name of the CSV file to save the results
     """
-    # 선택할 레이블의 데이터 조각
-    label_indices = range(1, len(eeg_raw_split) + 1)  # 레이블 인덱스를 1부터 시작하도록 변경
+    # Indices of labels to select
+    label_indices = range(1, len(eeg_raw_split) + 1)  # Adjust label indices to start from 1
 
-    # 결과를 저장할 리스트
+    # List to store results
     results = []
 
-    # 주파수 해상도를 2Hz로 설정하기 위한 n_fft 계산
-    n_fft = int(2 ** (np.ceil(np.log2(sampling_freq / 2))))  # 대략적인 n_fft 값
+    # Calculate n_fft for setting frequency resolution to 2Hz
+    n_fft = int(2 ** (np.ceil(np.log2(sampling_freq / 2))))  # Approximate n_fft value
 
     for label_index in label_indices:
-        # 선택한 레이블의 데이터 조각 (라벨 인덱스를 0 기반 인덱스로 변환)
+        # Select data chunks for the specified label (convert label index to 0-based index)
         chunks = eeg_raw_split[label_index - 1]
         
-        # 각 채널과 chunk에 대한 PSD를 저장할 딕셔너리
+        # Dictionary to store PSDs for each channel and chunk
         all_psds = {channel_name: [] for channel_name in ch_names}
         
-        # 각 chunk에 대해 PSD를 계산하고 저장
+        # Calculate and store PSD for each chunk
         for chunk_index, chunk in enumerate(chunks):
-            # MNE 객체 생성
+            # Create MNE info object
             info = mne.create_info(ch_names, ch_types=ch_types, sfreq=sampling_freq)
             info.set_montage('standard_1020')
             
             info['description'] = 'OpenBCI'
             info['bads'] = []  # Names of bad channels
             
-            # RawArray 객체 생성
+            # Create RawArray object
             raw = mne.io.RawArray(chunk.to_numpy(), info)
             
-            # 모든 채널에 대해 PSD 계산
+            # Calculate PSD for each channel
             for channel_name in ch_names:
                 data_array = raw.get_data(picks=[channel_name])
                 sfreq = raw.info['sfreq']
                 
-                # PSD 계산
+                # Calculate PSD
                 psd, freqs = mne.time_frequency.psd_array_welch(data_array, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=n_fft)
                 
-                # psd를 로그 스케일로 변환
+                # Convert PSD to log scale
                 psd = 10. * np.log10(psd)
                 
-                # PSD 결과 저장
+                # Store PSD results
                 all_psds[channel_name].append(psd[0])  # Assuming one channel per data array
         
-        # 각 채널의 PSD 평균과 분산 계산
+        # Calculate mean and variance of PSD for each channel
         for channel_name in ch_names:
             psds_for_channel = np.array(all_psds[channel_name])
             mean_psd = np.mean(psds_for_channel, axis=0)
             variance_psd = np.var(psds_for_channel, axis=0)  # Calculate variance
             
-            # 2Hz 간격으로 평균과 분산 계산
+            # Calculate mean and variance for each 2Hz interval
             for start_freq in range(4, 36, 2):
                 end_freq = start_freq + 2
                 mask = (freqs >= start_freq) & (freqs < end_freq)
-                if np.any(mask):  # mask가 비어있지 않으면
+                if np.any(mask):  # If mask is not empty
                     mean = np.mean(mean_psd[mask])
                     variance = np.mean(variance_psd[mask])
                     
-                    # 결과 리스트에 추가
+                    # Add results to the list
                     results.append({
-                        'Label': label_index,  # 라벨을 1부터 시작하도록 유지
+                        'Label': label_index,  # Keep label starting from 1
                         'Channel': channel_name,
                         'Frequency_Band': f'{start_freq}-{end_freq}Hz',
                         'Mean_PSD': mean,
                         'Variance_PSD': variance
                     })
 
-    # 결과를 pandas DataFrame으로 저장
+    # Save results to a pandas DataFrame
     df = pd.DataFrame(results)
 
-    # CSV 파일로 저장
+    # Save to CSV file
     df.to_csv(output_csv, index=False)
 
     print(f"Results saved to {output_csv}")
 
-# 사용
+# Usage
 if __name__ == "__main__":
     filenames = [f"C:/Users/windows/Desktop/EEG-GPT-main/Dataset/laf_eeg_data_ch9_label{i}.csv" for i in range(1, 6)]
     
