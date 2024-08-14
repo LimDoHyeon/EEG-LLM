@@ -25,31 +25,32 @@ def compute_band_power(raw, band):
 
 
 def extract_features(data, selected_columns, sfreq=250):
-    eeg_data = data.iloc[:, selected_columns].values  # Bring only the selected columns
-    ch_names = data.columns[selected_columns].tolist()  # Use the selected column names as channel names
-    info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types='eeg')  # Create an Info object
-    raw = mne.io.RawArray(eeg_data.T, info)  # RawArray 객체 생성
+    feature_dict = {}  # 결과를 저장할 딕셔너리
 
-    # Frequency band definition
-    delta_band = (0.5, 4)
-    theta_band = (4, 8)
-    alpha_band = (8, 12)
+    for item in selected_columns:
+        channel_idx = item[0]  # 채널 인덱스
+        bands = item[1]  # 해당 채널에서 추출할 주파수 대역 리스트
 
-    # Compute power in the frequency band
-    delta_power = compute_band_power(raw, delta_band)
-    theta_power = compute_band_power(raw, theta_band)
-    alpha_power = compute_band_power(raw, alpha_band)
+        # 주파수 대역이 하나만 주어졌을 때도 리스트로 처리
+        if isinstance(bands, tuple):
+            bands = [bands]
 
-    # Power ratio calculation
-    alpha_delta_ratio = alpha_power / delta_power
-    theta_alpha_ratio = theta_power / alpha_power
-    delta_theta_ratio = delta_power / theta_power
+        # 채널의 데이터 추출
+        eeg_data = data.iloc[:, channel_idx].values  # 특정 채널의 데이터를 가져옴
+        ch_name = data.columns[channel_idx]  # 채널 이름
 
-    # Create a feature dictionary
-    features = pd.DataFrame({
-        'Alpha:Delta Power Ratio': alpha_delta_ratio,
-        'Theta:Alpha Power Ratio': theta_alpha_ratio,
-        'Delta:Theta Power Ratio': delta_theta_ratio
-    }, index=selected_columns)  # Use the names of the selected columns as the index
+        # mne RawArray 객체 생성
+        info = mne.create_info(ch_names=[ch_name], sfreq=sfreq, ch_types='eeg')
+        raw = mne.io.RawArray(eeg_data[np.newaxis, :], info)  # 2D array 필요
+
+        # 주파수 대역별로 PSD 계산
+        for band in bands:
+            band_power = compute_band_power(raw, band)
+            # 열 이름 생성 (예: Channel_1_10-12Hz)
+            column_name = f'{ch_name}_{band[0]}-{band[1]}Hz'
+            feature_dict[column_name] = band_power
+
+    # 최종 데이터프레임 생성
+    features = pd.DataFrame([feature_dict])
 
     return features

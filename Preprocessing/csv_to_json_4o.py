@@ -11,37 +11,39 @@ from Preprocessing.feature_extraction import extract_features
 def csv_to_json(df, window_size, selected_columns, labels):
     """
     Convert a DataFrame of EEG data into a JSON format suitable for GPT-3 davinci.
-    =================================
-    1. You should pick selected_columns before run this function.
-    2. It contains the process of feature extraction.
-    =================================
     :param df: Data converted to pandas DataFrame from the original csv file
     :param window_size: Window size to divide EEG data
-    :param selected_columns: EEG channel to use (provide a list)
+    :param selected_columns: EEG channel to use (provide a list with frequency bands)
     :param labels: Label for each window (provide a list, left, right, top, bottom)
     :return: List of data in JSON format
     """
     json_array = []
 
     # EEG 채널 이름을 selected_columns에 매핑합니다.
-    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 0, 2, 3, 4에 대응
+    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 0, 1, 2, 3에 대응
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
-        label = int(labels[start])  # Assuming labels are provided for each window
-        label = str(label)
+        window_data = df.iloc[start:start + window_size, :]  # 전체 데이터를 가져옴
+        label = str(int(labels[start]))  # Assuming labels are provided for each window
 
-        features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
-        features_dict = features.to_dict('index')  # DataFrame to dictionary
+        # Extract features using the updated extract_features function
+        features = extract_features(window_data, selected_columns)  # feature extraction
+        features_dict = features.to_dict('index')[0]  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
-        features_dict_with_keys = {
-            f"at channel {channel_names[i]}": [
-                f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
-                f"Theta:Alpha Power Ratio: {features_dict[i]['Theta:Alpha Power Ratio']}",
-                f"Delta:Theta Power Ratio: {features_dict[i]['Delta:Theta Power Ratio']}"
-            ] for i in range(len(selected_columns))
-        }
+        features_dict_with_keys = {}
+        for i, (channel_idx, bands) in enumerate(selected_columns):
+            key = f"at channel {channel_names[i]}"
+            features_list = []
+            for band in bands if isinstance(bands, list) else [bands]:
+                band_key = f"{channel_names[i]}_{band[0]}-{band[1]}Hz"
+                power_value = features_dict[band_key]
+
+                # Flatten the power value if it's an array
+                if isinstance(power_value, np.ndarray):
+                    power_value = power_value.item()  # Convert array to scalar if it's 1D
+                features_list.append(f"Power in {band[0]}-{band[1]} Hz: {power_value}")
+            features_dict_with_keys[key] = features_list
 
         # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
@@ -69,26 +71,41 @@ def csv_to_json(df, window_size, selected_columns, labels):
     return json_array
 
 
-def csv_to_json_without_label(df, window_size, selected_columns):
+def csv_to_json_without_label(df, window_size, selected_columns, labels):
+    """
+    Convert a DataFrame of EEG data into a JSON format suitable for GPT-3 davinci.
+    :param df: Data converted to pandas DataFrame from the original csv file
+    :param window_size: Window size to divide EEG data
+    :param selected_columns: EEG channel to use (provide a list with frequency bands)
+    :param labels: Label for each window (provide a list, left, right, top, bottom)
+    :return: List of data in JSON format
+    """
     json_array = []
 
     # EEG 채널 이름을 selected_columns에 매핑합니다.
-    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 2, 2, 3, 4에 대응
+    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 0, 1, 2, 3에 대응
 
     for start in range(0, len(df) - window_size + 1, window_size):
-        window_data = df.iloc[start:start + window_size, selected_columns]  # Pick a single window based on selected_columns
+        window_data = df.iloc[start:start + window_size, :]  # 전체 데이터를 가져옴
 
-        features = extract_features(window_data, list(range(len(selected_columns))))  # feature extraction
-        features_dict = features.to_dict('index')  # DataFrame to dictionary
+        # Extract features using the updated extract_features function
+        features = extract_features(window_data, selected_columns)  # feature extraction
+        features_dict = features.to_dict('index')[0]  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
-        features_dict_with_keys = {
-            f"at channel {channel_names[i]}": [
-                f"Alpha:Delta Power Ratio: {features_dict[i]['Alpha:Delta Power Ratio']}",
-                f"Theta:Alpha Power Ratio: {features_dict[i]['Theta:Alpha Power Ratio']}",
-                f"Delta:Theta Power Ratio: {features_dict[i]['Delta:Theta Power Ratio']}"
-            ] for i in range(len(selected_columns))
-        }
+        features_dict_with_keys = {}
+        for i, (channel_idx, bands) in enumerate(selected_columns):
+            key = f"at channel {channel_names[i]}"
+            features_list = []
+            for band in bands if isinstance(bands, list) else [bands]:
+                band_key = f"{channel_names[i]}_{band[0]}-{band[1]}Hz"
+                power_value = features_dict[band_key]
+
+                # Flatten the power value if it's an array
+                if isinstance(power_value, np.ndarray):
+                    power_value = power_value.item()  # Convert array to scalar if it's 1D
+                features_list.append(f"Power in {band[0]}-{band[1]} Hz: {power_value}")
+            features_dict_with_keys[key] = features_list
 
         # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
