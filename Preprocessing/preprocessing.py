@@ -57,7 +57,13 @@ def main():
 
     window_size = 1000
     # FCz=0, C3=2, Cz=3, C4=4
-    selected_columns = [0, 2, 3, 4]  # EEG channels to use, selected by fisher ratio
+    # selected_columns = [0, 2, 3, 4]  # EEG channels to use, selected by fisher ratio
+    selected_columns = [
+        [0, [(10, 12), (12, 14)]],
+        [2, [(20, 22), (22, 24)]],
+        [3, [(8, 10), (18, 20)]],
+        [4, [(20, 22), (22, 24)]]
+    ]
 
     pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
