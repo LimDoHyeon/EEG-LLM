@@ -43,7 +43,12 @@ def calculate_fisher_ratios(df):
                         'Fisher_Ratio': fisher_ratio
                     })
 
-    return pd.DataFrame(fisher_ratios)
+    fisher_df = pd.DataFrame(fisher_ratios)
+    
+    # Sort the DataFrame by Fisher Ratio in descending order for each Label
+    fisher_df = fisher_df.sort_values(by=['Label', 'Fisher_Ratio'], ascending=[True, False])
+    
+    return fisher_df
 
 # Calculate Fisher Ratios
 fisher_df = calculate_fisher_ratios(df)
@@ -77,3 +82,4 @@ def plot_fisher_ratios(fisher_df):
 
 # Plot Fisher Ratio heatmaps
 plot_fisher_ratios(fisher_df)
+
