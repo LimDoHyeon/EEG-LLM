@@ -8,6 +8,11 @@ Additional filtering is not required as the data is already preprocessed.
 
 
 def load_eeg_data(file_path):
+    """
+    Load EEG data from a csv file and separate data and label.
+    :param file_path: File path of the EEG data
+    :return: EEG data (DataFrame), label
+    """
     data_src = pd.read_csv(file_path)
     data = data_src.iloc[:, :-1]  # Exclude the last column as it is a label
     label = data_src.iloc[:, -1]  # Use the last column as a label
@@ -15,6 +20,12 @@ def load_eeg_data(file_path):
 
 
 def compute_band_power(raw, band):
+    """
+    Compute the power in a specific frequency band.
+    :param raw: MNE Raw object
+    :param band: Frequency band of interest (tuple)
+    :return: Power in the frequency band
+    """
     fmin, fmax = band  # Setting frequency band
     data = raw.get_data()
     sfreq = raw.info['sfreq']
@@ -25,6 +36,14 @@ def compute_band_power(raw, band):
 
 
 def extract_features(data, selected_columns, sfreq=250):
+    """
+    Extract features from EEG data. Furthermore, the data is downsampled to the target sampling frequency.
+    :param data: EEG data (DataFrame)
+    :param selected_columns: List of tuples containing channel index and frequency bands
+    :param sfreq: Sampling frequency of the data
+    :param target_sfreq: Target sampling frequency
+    :return: Extracted features (DataFrame)
+    """
     feature_dict = {}  # 결과를 저장할 딕셔너리
 
     for item in selected_columns:
