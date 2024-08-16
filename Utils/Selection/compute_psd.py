@@ -1,7 +1,7 @@
 import mne
 import numpy as np
 import pandas as pd
-from data_split_chunk import preprocess_data, split_data_into_chunks, ch_names, ch_types, sampling_freq, p_detrend, p_normalization
+from data_split_chunk import preprocess_data, split_data_into_chunks, ch_names, ch_types, sampling_freq
 
 def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, fmin=4, fmax=36, output_csv='psd_results_2Hz.csv'):
     """
@@ -15,6 +15,9 @@ def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, f
     :param fmax: Maximum frequency for PSD calculation (Hz)
     :param output_csv: Name of the CSV file to save the results
     """
+    # New sampling frequency
+    new_sampling_freq = 100
+
     # Indices of labels to select
     label_indices = range(1, len(eeg_raw_split) + 1)  # Adjust label indices to start from 1
 
@@ -22,7 +25,7 @@ def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, f
     results = []
 
     # Calculate n_fft for setting frequency resolution to 2Hz
-    n_fft = int(2 ** (np.ceil(np.log2(sampling_freq / 2))))  # Approximate n_fft value
+    n_fft = int(2 ** (np.ceil(np.log2(new_sampling_freq / 2))))  # Approximate n_fft value
 
     for label_index in label_indices:
         # Select data chunks for the specified label (convert label index to 0-based index)
@@ -34,7 +37,7 @@ def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, f
         # Calculate and store PSD for each chunk
         for chunk_index, chunk in enumerate(chunks):
             # Create MNE info object
-            info = mne.create_info(ch_names, ch_types=ch_types, sfreq=sampling_freq)
+            info = mne.create_info(ch_names, ch_types=ch_types, sfreq=new_sampling_freq)
             info.set_montage('standard_1020')
             
             info['description'] = 'OpenBCI'
@@ -93,10 +96,10 @@ if __name__ == "__main__":
     filenames = [f"C:/Users/windows/Desktop/EEG-GPT-main/Dataset/laf_eeg_data_ch9_label{i}.csv" for i in range(1, 6)]
     
     # Preprocess data
-    eeg_raw = preprocess_data(filenames, p_detrend, p_normalization)
+    eeg_raw = preprocess_data(filenames, new_sampling_freq=100)
     
     # Split data into chunks
-    eeg_raw_split = split_data_into_chunks(eeg_raw, chunk_size=1000)
+    eeg_raw_split = split_data_into_chunks(eeg_raw, chunk_size=400)
     
     # Calculate and save PSD
     calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq)
