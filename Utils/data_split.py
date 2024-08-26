@@ -18,21 +18,24 @@ def data_split(data, train_dir, val_dir, test_dir):
     :param test_dir: 테스트 데이터 저장 경로
     """
     # Save the data in an array in units of 1000
+    print('Scanned data length : ', len(data))
+
     data_list = []
-    for i in range(0, 360000, 1000):
+    for i in range(0, len(data), 1000):
         data_list.append(data.iloc[i:i + 1000])
 
     random.shuffle(data_list)
 
     # Use 60% of the shuffled indices as training data, 20% as validation data and 20% as test data
+    chunk_data = int(len(data) / 10000)  # 1000 * 10(0.6, 0.8, 1.0 -> 6, 8, 10 // 소수점 연산 미지원)
     train_data = pd.DataFrame()
     test_data = pd.DataFrame()
     val_data = pd.DataFrame()
-    for i in range(0, 216):
+    for i in range(0, chunk_data*6):
         train_data = pd.concat([train_data, data_list[i]])
-    for i in range(216, 288):
+    for i in range(chunk_data*6, chunk_data*8):
         val_data = pd.concat([val_data, data_list[i]])
-    for i in range(288, 360):
+    for i in range(chunk_data*8, chunk_data*10):
         test_data = pd.concat([test_data, data_list[i]])
 
     # Drop the first column (index)
@@ -47,8 +50,8 @@ def data_split(data, train_dir, val_dir, test_dir):
 
 
 def main():
-    base_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
-    df = pd.read_csv(base_dir + 'laf_eeg_data_9ch_360000.csv')
+    base_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subj(high+inter+low)/'
+    df = pd.read_csv(base_dir + 'laf_eeg_data_9ch_840000.csv')
     train_dir = base_dir + 'train.csv'
     val_dir = base_dir + 'val.csv'
     test_dir = base_dir + 'test.csv'
