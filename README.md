@@ -4,7 +4,7 @@
   <li>LLM performs its own classification operations based on EEG data.</li>
   <li>We trained gpt-4o model utilizing fine-tuning for better performance.</li>
 </ul>
-<img width="952" alt="EEG-GPT pipiline" src="https://github.com/LimDoHyeon/EEG-GPT/assets/94499717/fa86e248-801a-49b1-a46c-9c28d38610c8">
+<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/5e44d117-c761-4bcb-8ea0-a7a612ddc33a">
 
 <br>
 <h2>Requirements</h2>
