@@ -29,7 +29,7 @@ def compute_band_power(raw, band):
     fmin, fmax = band  # Setting frequency band
     data = raw.get_data()
     sfreq = raw.info['sfreq']
-    psds, freqs = mne.time_frequency.psd_array_welch(data, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=256)  # Compute PSD
+    psds, freqs = mne.time_frequency.psd_array_welch(data, sfreq=sfreq, fmin=fmin, fmax=fmax, n_fft=128)  # Compute PSD
     # Compute power in the frequency band
     band_power = np.sum(psds, axis=-1)
     return band_power
