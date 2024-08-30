@@ -23,13 +23,7 @@
 
 <br>
 <h2>Features</h2>
-<p>The following three features were used: </p>
-<ul><strong>
-  <li>alpha:delta power ratio</li>
-  <li>theta:alpha power ratio</li>
-  <li>delta:theta power ratio</li>
-</ul></strong>
-<p>And for feature selection, <strong>Fisher Ratio</strong> is utilized.</p>
+<p>For feature selection and extraction, <strong>Fisher Ratio</strong> is utilized.</p>
 <table style="border-collapse: collapse; width: 100%; data-ke-align="alignLeft">
   <tbody>
         <tr>
@@ -40,10 +34,10 @@
         </tr>
   </tbody>
 </table>
-<p>Based on the results, we provide only the following four channels as input to the model: 13 (FCz), 28 (C3), 31 (Cz), and 34 (C4).</p>
 
 <br>
 <h2>Evaluation</h2>
+<p>To compare fine-tuned LLM classifier's performance with traditional ML models, we additionally trained <strong>SVM</strong>, <strong>RF</strong> and <strong>MLP</strong> in the same data and same preprocessing method.</p>
 <p>Performance metrics:
 <ul>
   <li><strong>Accuracy</strong></li>
@@ -52,7 +46,3 @@
 </ul>
 <p>(Metrics plot will be here)</p>
 </p>
-
-<br>
-<h2>Reference</h2>
-<p>- Jonathan W.Kim et al. EEG-GPT: EXPLORING CAPABILITIES OF LARGE LANGUAGE MODELS FOR EEG CLASSIFICATION AND INTERPRETATION. 2024. arXiv:2401.18006 [q-bio.QM]</p>
