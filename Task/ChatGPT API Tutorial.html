@@ -1,0 +1,854 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>ChatGPT API</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="50812ed6-f74c-48a9-9c05-60d668bc56bf" class="page sans"><header><h1 class="page-title">ChatGPT API</h1><p class="page-description"></p></header><div class="page-body"><p id="cb2fec4e-3366-488c-a270-0edc10587083" class="">Author: <a href="https://github.com/LimDoHyeon">Do-Hyeon Lim</a></p><p id="6ce54ec0-fc9e-4f50-9c4f-39cf1dbf5f45" class="">
+</p><nav id="7c5e84bd-3d2b-4000-8cc6-7f2458d749e5" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#48db9ec9-1f6e-4117-b610-67c0bcd06970">1. Primary codes</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#87da21da-5dce-466f-8b41-81845eae7fd0">2. API Models</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7deca16f-c0a6-4af9-b144-12dbcdb7dff3">3. Usecase</a></div></nav><p id="364b46ec-4300-4a6d-a480-57d65e5c7105" class="">
+</p><p id="a7106d2c-8499-4629-8f02-341c55701e18" class="">※ API KEY 확인 및 file-id, model-id 확인 방법 등은 아래 Dashboard 등 참고</p><figure id="02aff652-9f85-4b11-b240-86c9d8861ed2"><a href="https://platform.openai.com/settings/profile?tab=api-keys" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">OpenAI Platform</div><div class="bookmark-description">Explore developer resources, tutorials, API docs, and dynamic examples to get the most out of OpenAI&#x27;s platform.</div></div><div class="bookmark-href"><img src="https://platform.openai.com/favicon.svg" class="icon bookmark-icon"/>https://platform.openai.com/settings/profile?tab=api-keys</div></div><img src="https://cdn.openai.com/API/images/opengraph.png" class="bookmark-image"/></a><figcaption>API Key 확인 위한 Dashboard</figcaption></figure><figure id="929d1ab4-c969-4876-8da1-a775a7512c6a"><a href="https://platform.openai.com/storage/files/file-iaHxTtoHJN5Li7eIL1tR6iM9" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">OpenAI Platform</div><div class="bookmark-description">Explore developer resources, tutorials, API docs, and dynamic examples to get the most out of OpenAI&#x27;s platform.</div></div><div class="bookmark-href"><img src="https://platform.openai.com/favicon.svg" class="icon bookmark-icon"/>https://platform.openai.com/storage/files/file-iaHxTtoHJN5Li7eIL1tR6iM9</div></div><img src="https://cdn.openai.com/API/images/opengraph.png" class="bookmark-image"/></a><figcaption>본 페이지 내 Storage → fine-tuning datasets, Fine-tuning → fine-tuned models’ id</figcaption></figure><p id="435759d4-6625-47ff-a693-59606a9eee87" class="">
+</p><h3 id="48db9ec9-1f6e-4117-b610-67c0bcd06970" class="">1. Primary codes</h3><hr id="1ec6992d-1f59-4d56-8778-9752e751a336"/><blockquote id="3d985c0c-a5a7-41a9-bc92-76e65f6003fe" class="">초기 세팅</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7c33eb59-df07-4e63-bdf1-b1d50f795a0b" class="code"><code class="language-Python">import openai
+from openai import OpenAI
+
+openai.api_key = os.getenv(&quot;OPENAI_API_KEY&quot;)  # OPENAI_API_KEY : 개인별 환경변수
+client = OpenAI()</code></pre><ul id="d4fcdb28-ae0a-475d-919f-c1aab33bf1b7" class="bulleted-list"><li style="list-style-type:disc">OPENAI_API_KEY : 사전에 개인별 환경변수 지정 필요</li></ul><ul id="fe5c8cd0-abf7-495f-9619-bdfa9e8378ef" class="bulleted-list"><li style="list-style-type:disc">client를 선언해 둬야 뒤에서 진행할 파인튜닝 작업 시작이 가능함.</li></ul><p id="20f35ae3-4d25-4c52-a80d-364c7b19b3a3" class="">
+</p><blockquote id="71926845-4f14-4d7f-9c9e-90a3ced5bce6" class="">training file 불러오기<br/>(train set, test set 둘 다 사용하는 경우로 가정)<br/></blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aab6a7f1-83c3-42c9-b3ad-a720f5f3ab95" class="code"><code class="language-Python">train_dir = &#x27;your_train_dir.jsonl&#x27;  # json을 jsonl로 변환해야 함
+test_dir = &#x27;your_test_dir.jsonl&#x27;
+
+# Load train data
+client.files.create(
+	file=open(train_dir, &quot;rb&quot;),
+	purpose=&quot;fine-tune&quot;
+)
+print(f&quot;Loaded {train_jsonl_dir}&quot;)
+
+# Load test data
+client.files.create(
+	file=open(test_dir, &quot;rb&quot;),
+	purpose=&#x27;fine-tune&#x27;
+)
+print(f&quot;Loaded {test_jsonl_dir}&quot;)</code></pre><ul id="b18d6021-78e5-4a33-aa32-098081a23f3e" class="bulleted-list"><li style="list-style-type:disc">이렇게 train data, test data를 모두 로드하면 각각의 file_id가 생성됨. 이는 주피터 노트북에서 <code>client.files.list()</code> 를 입력하여 확인할 수도 있고, API Dashboard GUI(웹)에서 확인할 수도 있음.</li></ul><ul id="2464a5c3-89c6-448d-aa22-100ad4284973" class="bulleted-list"><li style="list-style-type:disc">train data, test data 각각의 file_id는 <strong>파인튜닝을 본격적으로 시작할 때</strong> 사용되므로 따로 기억해둘 것.</li></ul><p id="285baf41-4b5e-4d37-bcab-506c5a69ae75" class="">
+</p><blockquote id="6103cf32-c3a0-4d3a-b970-1f2938d8af13" class="">Fine-tuning job 시작하기</blockquote><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b3225a43-22d4-4a0a-91ee-e153aba9db1f" class="code"><code class="language-Python">training_file = &#x27;file-your_train_id&#x27;  # 사용자별로 다름
+test_file = &#x27;file-your_test_id&#x27;  # 사용자별로 다름
+model = &#x27;your_model&#x27;  # davinci-002, gpt-3.5-turbo, or gpt-4o .. your choice
+
+# Start fine-tuning
+client.fine_tuning.jobs.create(
+    training_file=training_file,
+    validation_file=test_file,
+    model=model
+    # hyperparameters는 default=auto 이므로 설정하지 않음
+    # hyperparameters={
+    #     &#x27;n_epochs&#x27;:10,
+    #     &#x27;batch_size&#x27;:16,
+    #     &#x27;learning_rate_multiplier&#x27;:1e-4
+    # }
+)</code></pre><ul id="98481165-50be-44d8-a922-5b782efaf41b" class="bulleted-list"><li style="list-style-type:disc">(client는 이미 불러와진 상태라고 가정)</li></ul><ul id="f6b64cb8-3728-4e38-99a7-b1a7bc333465" class="bulleted-list"><li style="list-style-type:disc">hyperparameters는 따로 지정하지 않으면 gpt에서 자동으로 최적의 값을 할당해 줌. 특별한 목적이 있는 것이 아니라면 특별히 건드릴 필요는 없음.</li></ul><p id="50eacd96-4d81-4e5d-ad90-3a27f5ffefba" class="">
+</p><blockquote id="6ad53168-977e-4c81-9720-a54a2c9c66cc" class="">완료된 파인튜닝 모델 불러와 사용하기</blockquote><p id="dd515114-c399-4081-9a6e-b4b3c2d75faa" class=""><mark class="highlight-gray">&lt;legacy model&gt;</mark></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="5383f155-b635-4b57-8bd1-831d277426f6" class="code"><code class="language-Python">completed_model = &quot;ft:your_model&quot;  # 개인별로 다름
+msg = []  # 사용자 프롬프트(질문)
+
+def use_model(completed_model, msg):
+    response = client.completions.create(
+        model=completed_model,
+        messages=msg,
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return response.choices[0].message</code></pre><ul id="4be76eda-7601-4905-a2dd-acdf95ae8d35" class="bulleted-list"><li style="list-style-type:disc">마찬가지로 client는 사전 선언 가정</li></ul><p id="d438cc3c-7eb1-4bd5-ba77-67709f11c1ce" class=""><mark class="highlight-gray">&lt;modern model&gt;</mark></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="db0b839f-259e-48cc-8e55-fc8190771680" class="code"><code class="language-Python">completion = client.chat.completions.create(
+  model=&quot;ft:gpt-4o-mini:my-org:custom_suffix:id&quot;,
+  messages=[
+    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}
+  ]
+)
+print (completion.choices[0].message)</code></pre><ul id="766580b4-e287-4519-9917-d9ce889adc21" class="bulleted-list"><li style="list-style-type:disc">role이 새로 추가되는 것을 제외하곤 큰 차이 없음</li></ul><ul id="cf9eef78-4ae0-4d5d-8c44-92ba58b41bed" class="bulleted-list"><li style="list-style-type:disc">하이퍼파라미터 지정 불요(자동지정)</li></ul><p id="9feaaae9-a9a1-459e-980b-c088f036b18f" class="">
+</p><p id="4d2567e7-20dd-431d-bc86-71003011d848" class="">
+</p><h3 id="87da21da-5dce-466f-8b41-81845eae7fd0" class="">2. API Models</h3><hr id="9c2a62b9-a6df-46c8-8ced-56acbb02f61d"/><blockquote id="6de63653-8e0d-4e79-b086-c361a379bed3" class="">davinci-002 vs gpt-4o</blockquote><ul id="25ea07ba-5722-446f-98e3-6a5fc317246a" class="bulleted-list"><li style="list-style-type:disc">다빈치 모델은 gpt-3을 기반으로 만들어진 모델로, 현재는 <code>babbage-002</code>와 함께 legacy 모델에 속함.</li></ul><ul id="666fe85c-176b-447f-9a4c-b7252c41b73d" class="bulleted-list"><li style="list-style-type:disc">기능적 차이는 없으며, 4o가 더 많은 토큰을 가지고 있으므로 더욱 우수한 모델</li></ul><p id="68052f74-c5c2-49a0-8e6d-c854c979755d" class="">
+</p><p id="43fbf7f4-a43e-4973-8b70-f15a927a9b9a" class=""><mark class="highlight-gray">&lt;gpt-3.5 turbo 이상 모델 사용 예시&gt;</mark></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="aa0307ba-4507-4a99-9263-3290048c11ea" class="code"><code class="language-JSON">{&quot;messages&quot;: [{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Marv is a factual chatbot that is also sarcastic.&quot;}, {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What&#x27;s the capital of France?&quot;}, {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Paris, as if everyone doesn&#x27;t know that already.&quot;}]}
+{&quot;messages&quot;: [{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Marv is a factual chatbot that is also sarcastic.&quot;}, {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Who wrote &#x27;Romeo and Juliet&#x27;?&quot;}, {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Oh, just some guy named William Shakespeare. Ever heard of him?&quot;}]}
+{&quot;messages&quot;: [{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;Marv is a factual chatbot that is also sarcastic.&quot;}, {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;How far is the Moon from Earth?&quot;}, {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Around 384,400 kilometers. Give or take a few, like that really matters.&quot;}]}</code></pre><p id="87022a04-34ba-4237-af29-a62508d59cad" class=""><mark class="highlight-gray">&lt;legacy 모델 사용 예시&gt;</mark></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b0966662-a22d-427a-8111-8d4804e3f209" class="code"><code class="language-JSON">{&quot;prompt&quot;: &quot;&lt;prompt text&gt;&quot;, &quot;completion&quot;: &quot;&lt;ideal generated text&gt;&quot;}
+{&quot;prompt&quot;: &quot;&lt;prompt text&gt;&quot;, &quot;completion&quot;: &quot;&lt;ideal generated text&gt;&quot;}
+{&quot;prompt&quot;: &quot;&lt;prompt text&gt;&quot;, &quot;completion&quot;: &quot;&lt;ideal generated text&gt;&quot;}</code></pre><p id="7448262b-b684-455b-bd6e-480993e7afd7" class="">
+</p><p id="b9a36dc3-1125-4624-9f14-9482847fee2b" class="">{prompt-completion}쌍인 기존 모델과 달리,<br/>현재는 {messages: [{<br/><mark class="highlight-gray_background">role(system)-content</mark>}, {<mark class="highlight-orange_background">role(user)-content</mark>}, {<mark class="highlight-blue_background">role(assistant)-content</mark>}]} 쌍으로 이루어져 있음.</p><ul id="85f9b8f0-c80d-48d5-97c3-57da7d748f36" class="bulleted-list"><li style="list-style-type:disc">system role은 사전 세팅(코드 예시 : 너는 Marv라는 빈정대는 팩트체크 챗봇이다.)</li></ul><ul id="9779e74d-a52f-42b0-9d97-57d9da43dd5d" class="bulleted-list"><li style="list-style-type:disc">user role은 기존 prompt, assistant role은 기존 completion.</li></ul><p id="0f59f025-2505-43fa-9ca1-ea543a46e608" class="">
+</p><h3 id="7deca16f-c0a6-4af9-b144-12dbcdb7dff3" class="">3. Usecase</h3><hr id="aa6247e7-2ce0-4213-a518-4d10ff92bb99"/><ul id="c29e196e-a8cc-4d7b-8ff4-2f1ba1bcc1b8" class="toggle"><li><details open=""><summary><code>train.ipynb</code> (id를 순차적으로 받아와 사용해야 하므로 훈련 과정에서는 주피터가 더욱 간편함)</summary><ul id="3c7723fd-4435-4f3c-9bf7-e56a6d1cc3c2" class="bulleted-list"><li style="list-style-type:disc">Import libraries<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1ad46d3d-4e7c-46cf-8654-74a52da17fa2" class="code"><code class="language-Python">import os
+from openai import OpenAI
+import openai
+import json
+from Preprocessing.feature_extraction import load_eeg_data</code></pre></li></ul><ul id="b2c85b32-d123-4475-b7a8-8a405d3a8948" class="bulleted-list"><li style="list-style-type:disc">Load GPT API<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0b201d86-eb41-4570-834a-3076cff54c53" class="code"><code class="language-Python">openai.api_key = os.getenv(&quot;OPENAI_API_KEY&quot;)
+client = OpenAI()</code></pre></li></ul><ul id="94b3bbcf-f526-4935-bedc-14ff0a0a3976" class="bulleted-list"><li style="list-style-type:disc">Define data uploading function &amp; Upload data<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="13d38c1f-4368-4780-a239-6dc358095b57" class="code"><code class="language-Python">def create_file(train_jsonl_dir, val_jsonl_dir):
+    &quot;&quot;&quot;
+    Create a file in the OpenAI API
+    After creating the file, you should see the file ID(train/test) in the website(platform.openai.com).
+    :param train_jsonl_dir: A directory of the train data in jsonl format
+    :param val_jsonl_dir: A directory of the test data in jsonl format
+    :return:
+    &quot;&quot;&quot;
+    # load train data
+    client.files.create(
+        file=open(train_jsonl_dir, &#x27;rb&#x27;),
+        purpose=&#x27;fine-tune&#x27;
+    )
+    print(f&quot;Loaded {train_jsonl_dir}&quot;)
+
+    # load validation data
+    client.files.create(
+        file=open(val_jsonl_dir, &#x27;rb&#x27;),
+        purpose=&#x27;fine-tune&#x27;
+    )
+    print(f&quot;Loaded {val_jsonl_dir}&quot;)</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="885cb6f7-aab6-4349-92ea-c35402acdbbb" class="code"><code class="language-Python">base_path = &#x27;ActualDatasetDirectory/EEG-LLM/Dataset/&#x27;
+train_jsonl_dir = base_path + &#x27;selected/jsonl/train.jsonl&#x27;
+val_jsonl_dir = base_path + &#x27;selected/jsonl/val.jsonl&#x27;
+
+create_file(train_jsonl_dir, val_jsonl_dir)</code></pre></li></ul><ul id="e302a6a6-8ac0-44d3-82bc-c9c53b7d5296" class="bulleted-list"><li style="list-style-type:disc">Define dataset id and model id<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="90a961ad-6366-47b1-ad5c-893e67fc55e4" class="code"><code class="language-Python">training_file = &#x27;file-actualFileId&#x27;  # Ensure this should be checked in the website(platform.openai.com)
+val_file = &#x27;file-actualFileId&#x27;  # Ensure this should be checked in the website(platform.openai.com)
+model = &#x27;gpt-actualModelId&#x27;</code></pre></li></ul><ul id="7f392feb-e344-4767-8e06-cf62fa27b5e5" class="bulleted-list"><li style="list-style-type:disc">Define training function &amp; Train<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="f1de4a2e-95e2-4bbf-9451-e6c7a114c258" class="code"><code class="language-Python">def train(training_file, val_file, model):
+    &quot;&quot;&quot;
+    Fine-tuning the GPT model.
+    After training, you should check the name of the model in the website(platform.openai.com).
+    :param training_file: The ID of the training file
+    :param val_file: The ID of the validation file
+    :param model: anything you want(davinci-002 / gpt-3.5-turbo / and so on)
+    &quot;&quot;&quot;
+    # start fine-tuning
+    client.fine_tuning.jobs.create(
+        training_file=training_file,
+        validation_file=val_file,
+        model=model
+        # default=auto, thus it doesn&#x27;t need to be specified
+        # hyperparameters={
+        #     &#x27;n_epochs&#x27;:10,
+        #     &#x27;batch_size&#x27;:16,
+        #     &#x27;learning_rate_multiplier&#x27;:1e-4
+        # }
+    )
+
+    print(&quot;Fine-tuning started.&quot;)</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fe1a54eb-aa76-411a-a10f-bb45d96d1649" class="code"><code class="language-Python">train(training_file, val_file, model)</code></pre></li></ul></details></li></ul><ul id="1f7ab837-9e99-4b3e-a071-b36cd172c807" class="toggle"><li><details open=""><summary><code>eval.py</code> </summary><ul id="e1580d3b-1fac-45ce-b240-aeb6c0a9a0ad" class="bulleted-list"><li style="list-style-type:disc">Import libraries<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="b3e4ca5f-afe3-41eb-a892-57962fe5dcaa" class="code"><code class="language-Python">import os
+import openai
+from openai import OpenAI
+from Preprocessing.feature_extraction import load_eeg_data
+from Preprocessing.csv_to_json_4o import csv_to_json_without_label
+from sklearn.metrics import cohen_kappa_score, f1_score, accuracy_score</code></pre></li></ul><ul id="bd57a885-6619-42a0-a52b-1538c67afb8e" class="bulleted-list"><li style="list-style-type:disc">Define function that returns responses from GPT<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="c2cc7190-17c3-43e1-83c1-df2508b280b3" class="code"><code class="language-Python">def use_model(msg, model_id):
+    completion = client.chat.completions.create(
+        model=model_id,
+        messages=msg
+    )
+    return completion.choices[0].message.content</code></pre></li></ul><ul id="a7973ffe-1458-4977-9467-a109bdd32d73" class="bulleted-list"><li style="list-style-type:disc">Evaluation function using <code>use_model</code> (this function uses ‘Preprocessing’ module)<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="329287f9-c15a-4c20-9b91-00eba4d05989" class="code"><code class="language-Python">def evaluate(data, label, window_size, selected_columns, model_id):
+    &quot;&quot;&quot;
+    Process :
+    1. Receive test data (csv) as a parameter
+    2. Preprocess and convert it into json format, input it into gpt one task at a time
+    3. Save the completion of gpt to the buffer
+    4. Collect the completions in the buffer and input them into F1 Score and Kappa Coefficient with the actual label
+    5. Print the result
+    &quot;&quot;&quot;
+    model_pred = []
+    counted_label = [int(label[i]) for i in range(0, len(label), window_size)]
+
+    # Get responses(prediction) from the model
+    json_data = csv_to_json_without_label(data, window_size, selected_columns)
+    for i in range(len(json_data)):
+        response = use_model(json_data[i][&#x27;messages&#x27;], model_id)
+        print(i + 1, &#x27;/&#x27;, str(len(json_data)), &#x27;epochs completed : &#x27;, response, &#x27;/&#x27;, counted_label[i])
+        model_pred.append(response)
+
+    model_pred = [int(pred) for pred in model_pred if pred]
+    print(&#x27;length of model_pred : &#x27;, len(model_pred))
+
+    # Calculate Accuracy, F1 Score, Kappa Coefficient
+    accuracy = accuracy_score(counted_label, model_pred)
+    f1 = f1_score(counted_label, model_pred, average=&#x27;weighted&#x27;)
+    kappa = cohen_kappa_score(counted_label, model_pred)
+
+    print(&#x27;Accuracy : {0:.4f}&#x27;.format(accuracy))
+    print(&#x27;F1 Score : {0:.4f}&#x27;.format(f1))
+    print(&#x27;Kappa Coefficient : {0:.4f}&#x27;.format(kappa))</code></pre></li></ul><ul id="0d1d406f-cd5f-4845-872e-28b05e37910d" class="bulleted-list"><li style="list-style-type:disc">Pipeline (this function uses ‘Preprocessing’ module)<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="d466842c-90ab-474a-9d64-f88cc08623ee" class="code"><code class="language-Python">def main():
+    base_path = &#x27;ActualDirectory/EEG-LLM/Dataset/&#x27;
+    test_csv = base_path + &#x27;test.csv&#x27;
+    window_size = 1000
+    selected_columns = [0, 2, 3, 4]
+
+    # Evaluate the fine-tuned model
+    model_id = &#x27;ft:gpt-finetuned-Actual-ModelId&#x27;  # Fine-tuned model id (check it in the openai dashboard)
+
+    data, label = load_eeg_data(test_csv)
+    evaluate(data, label, window_size, selected_columns, model_id)</code></pre></li></ul></details></li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
