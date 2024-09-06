@@ -15,7 +15,7 @@ import numpy as np
 import json
 
 
-def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
+def pipeline(csv_path, csp_path, json_path, jsonl_path, window_size, selected_columns):
     """
     Load the EEG data csv file, convert the preprocessed data to json format, and convert the json to jsonl format and save it.
     :param csv_path:  EEG data csv file path
@@ -28,7 +28,7 @@ def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
     data, label = load_eeg_data(csv_path)
 
     # Preprocess the loaded data and convert it to json format
-    json_data = csv_to_json(data, window_size, selected_columns, label)
+    json_data = csv_to_json(data, csp_path, window_size, selected_columns, label)
 
     # Save the converted data to the specified path
     with open(json_path, 'w') as json_file:
@@ -40,33 +40,38 @@ def pipeline(csv_path, json_path, jsonl_path, window_size, selected_columns):
 
 
 def main():
-    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
+    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subject 1 data (k3b)/down sampling X ver/label45/'
 
     train_csv_path = base_path + 'train.csv'
     val_csv_path = base_path + 'val.csv'
-    # test_csv_path = base_path + 'test.csv'
 
-    train_json_path = base_path + 'selected/json/train.json'
-    train_jsonl_path = base_path + 'selected/jsonl/train.jsonl'
+    train_json_path = base_path + 'json/train.json'
+    train_jsonl_path = base_path + 'jsonl/train.jsonl'
 
-    val_json_path = base_path + 'selected/json/val.json'
-    val_jsonl_path = base_path + 'selected/jsonl/val.jsonl'
+    val_json_path = base_path + 'json/val.json'
+    val_jsonl_path = base_path + 'jsonl/val.jsonl'
 
-    # test_json_path = base_path + 'selected/json/test.json'
-    # test_jsonl_path = base_path + 'selected/jsonl/test.jsonl'
+    train_csp_path = base_path + 'csp4/class_4_vs_5_train_features.csv'
+    val_csp_path = base_path + 'csp4/class_4_vs_5_val_features.csv'
+
+    train_csp, train_csp_label = load_eeg_data(train_csp_path)
+    val_csp, val_csp_label = load_eeg_data(val_csp_path)
+    train_csp = train_csp.to_numpy()
+    val_csp = val_csp.to_numpy()
 
     window_size = 1000
     # FCz=0, C3=2, Cz=3, C4=4
     # selected_columns = [0, 2, 3, 4]  # EEG channels to use, selected by fisher ratio
     selected_columns = [
-        [0, [(10, 12), (12, 14)]],
-        [2, [(20, 22), (22, 24)]],
-        [3, [(8, 10), (18, 20)]],
-        [4, [(20, 22), (22, 24)]]
+        [0, [(10, 12), (12, 14)]],  # FCz
+        [2, [(20, 22), (22, 24)]],  # C3
+        [3, [(8, 10)]],  # Cz
+        [4, [(20, 22), (22, 24)]],  # C4
+        [5, [(28, 30)]],  # CP3
     ]
 
-    pipeline(train_csv_path, train_json_path, train_jsonl_path, window_size, selected_columns)
-    pipeline(val_csv_path, val_json_path, val_jsonl_path, window_size, selected_columns)
+    pipeline(train_csv_path, train_csp, train_json_path, train_jsonl_path, window_size, selected_columns)
+    pipeline(val_csv_path, val_csp, val_json_path, val_jsonl_path, window_size, selected_columns)
     # pipeline(test_csv_path, test_json_path, test_jsonl_path, window_size, selected_columns)
 
 
