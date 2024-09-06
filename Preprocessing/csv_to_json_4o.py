@@ -8,7 +8,7 @@ import json
 from Preprocessing.feature_extraction import extract_features
 
 
-def csv_to_json(df, window_size, selected_columns, labels):
+def csv_to_json(df, csp, window_size, selected_columns, labels):
     """
     Convert a DataFrame of EEG data into a JSON format suitable for GPT-3 davinci.
     :param df: Data converted to pandas DataFrame from the original csv file
@@ -20,7 +20,7 @@ def csv_to_json(df, window_size, selected_columns, labels):
     json_array = []
 
     # EEG 채널 이름을 selected_columns에 매핑합니다.
-    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 0, 1, 2, 3에 대응
+    channel_names = ['FCz', 'C3', 'Cz', 'C4', 'CP3']  # 각각 0, 1, 2, 3에 대응
 
     for start in range(0, len(df) - window_size + 1, window_size):
         window_data = df.iloc[start:start + window_size, :]  # 전체 데이터를 가져옴
@@ -28,6 +28,9 @@ def csv_to_json(df, window_size, selected_columns, labels):
 
         # Extract features using the updated extract_features function
         features = extract_features(window_data, selected_columns)  # feature extraction
+        cspdata = pd.DataFrame(csp[int(start / 1000)]).T  # cspdata 가져옴
+        # features와 cspdata 가로 방향으로 합침
+        features = pd.concat([features, cspdata], axis=1)
         features_dict = features.to_dict('index')[0]  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
@@ -45,6 +48,9 @@ def csv_to_json(df, window_size, selected_columns, labels):
                 features_list.append(f"Power in {band[0]}-{band[1]} Hz: {power_value}")
             features_dict_with_keys[key] = features_list
 
+        # Set the CSP 값을 라벨에 맞게 프롬프트에 추가
+        csp_key = f"CSP values: 0: {cspdata.values[0][0]}, 1: {cspdata.values[0][1]}"
+
         # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
 
@@ -55,7 +61,9 @@ def csv_to_json(df, window_size, selected_columns, labels):
             features_str += f"{key}:\n"
             features_str += "\n".join([f"  {v}" for v in value])
             features_str += "\n"
-        combined_prompt = f"{prompt}\n{features_str}"
+
+        # CSP 값을 프롬프트에 포함
+        combined_prompt = f"{prompt}\n{features_str}\n{csp_key}\n"
 
         # Convert the data to JSON format
         json_entry = {
@@ -83,13 +91,16 @@ def csv_to_json_without_label(df, window_size, selected_columns):
     json_array = []
 
     # EEG 채널 이름을 selected_columns에 매핑합니다.
-    channel_names = ['FCz', 'C3', 'Cz', 'C4']  # 각각 0, 1, 2, 3에 대응
+    channel_names = ['FCz', 'C3', 'Cz', 'C4', 'CP3']  # 각각 0, 1, 2, 3에 대응
 
     for start in range(0, len(df) - window_size + 1, window_size):
         window_data = df.iloc[start:start + window_size, :]  # 전체 데이터를 가져옴
 
         # Extract features using the updated extract_features function
         features = extract_features(window_data, selected_columns)  # feature extraction
+        cspdata = pd.DataFrame(csp[int(start / 1000)]).T  # cspdata 가져옴
+        # features와 cspdata 가로 방향으로 합침
+        features = pd.concat([features, cspdata], axis=1)
         features_dict = features.to_dict('index')[0]  # DataFrame to dictionary
 
         # Generate features_dict_with_keys
@@ -107,6 +118,9 @@ def csv_to_json_without_label(df, window_size, selected_columns):
                 features_list.append(f"Power in {band[0]}-{band[1]} Hz: {power_value}")
             features_dict_with_keys[key] = features_list
 
+        # Set the CSP 값을 라벨에 맞게 프롬프트에 추가
+        csp_key = f"CSP values: 0: {cspdata.values[0][0]}, 1: {cspdata.values[0][1]}"
+
         # Set the GPT's role
         system_message = "Look at the feature values of a given EEG electrode and determine which label the data belongs to. The result should always provide only integer label values."
 
@@ -117,7 +131,9 @@ def csv_to_json_without_label(df, window_size, selected_columns):
             features_str += f"{key}:\n"
             features_str += "\n".join([f"  {v}" for v in value])
             features_str += "\n"
-        combined_prompt = f"{prompt}\n{features_str}"
+
+        # CSP 값을 프롬프트에 포함
+        combined_prompt = f"{prompt}\n{features_str}\n{csp_key}\n"
 
         # Convert the data to JSON format
         json_entry = {

@@ -5,3 +5,4 @@ Preprocessing/__pycache__
 Task/__pycache__
 *.pyc
 Dataset
+Task/id_list.txt
