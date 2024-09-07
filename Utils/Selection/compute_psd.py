@@ -25,7 +25,7 @@ def calculate_psd_for_labels(eeg_raw_split, ch_names, ch_types, sampling_freq, f
     results = []
 
     # Calculate n_fft for setting frequency resolution to 2Hz
-    n_fft = int(2 ** (np.ceil(np.log2(sampling_freq / 2))))
+    n_fft = int(2 ** (np.ceil(np.log2(sampling_freq / 2))))  # Approximate n_fft value : 128
 
 
     for label_index in label_indices:
