@@ -79,7 +79,7 @@ def csv_to_json(df, csp, window_size, selected_columns, labels):
     return json_array
 
 
-def csv_to_json_without_label(df, window_size, selected_columns):
+def csv_to_json_without_label(df, csp, window_size, selected_columns):
     """
     Convert a DataFrame of EEG data into a JSON format suitable for GPT-3 davinci.
     :param df: Data converted to pandas DataFrame from the original csv file
