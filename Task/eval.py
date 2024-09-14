@@ -3,7 +3,7 @@ import openai
 from openai import OpenAI
 from Preprocessing.feature_extraction import load_eeg_data
 from Preprocessing.csv_to_json_4o import csv_to_json_without_label
-from sklearn.metrics import cohen_kappa_score, f1_score, accuracy_score
+from sklearn.metrics import roc_auc_score, f1_score, accuracy_score
 
 
 def use_model(msg, model_id):
@@ -14,7 +14,7 @@ def use_model(msg, model_id):
     return completion.choices[0].message.content
 
 
-def evaluate(data, label, window_size, selected_columns, model_id):
+def evaluate(data, csp, label, window_size, selected_columns, model_id):
     """
     Process :
     1. Receive test data (csv) as a parameter
@@ -27,7 +27,7 @@ def evaluate(data, label, window_size, selected_columns, model_id):
     counted_label = [int(label[i]) for i in range(0, len(label), window_size)]
 
     # Get responses(prediction) from the model
-    json_data = csv_to_json_without_label(data, window_size, selected_columns)
+    json_data = csv_to_json_without_label(data, csp, window_size, selected_columns)
     for i in range(len(json_data)):
         response = use_model(json_data[i]['messages'], model_id)
         print(i + 1, '/', str(len(json_data)), 'epochs completed : ', response, '/', counted_label[i])
@@ -39,24 +39,34 @@ def evaluate(data, label, window_size, selected_columns, model_id):
     # Calculate Accuracy, F1 Score, Kappa Coefficient
     accuracy = accuracy_score(counted_label, model_pred)
     f1 = f1_score(counted_label, model_pred, average='weighted')
-    kappa = cohen_kappa_score(counted_label, model_pred)
+    rocauc = roc_auc_score(counted_label, model_pred)
 
     print('Accuracy : {0:.4f}'.format(accuracy))
     print('F1 Score : {0:.4f}'.format(f1))
-    print('Kappa Coefficient : {0:.4f}'.format(kappa))
+    print('ROC-AUC Score : {0:.4f}'.format(rocauc))
 
 
 def main():
-    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/BXAI/EEG-LLM/Dataset/'
+    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subject 1 data (k3b)/down sampling X ver/label35/'
     test_csv = base_path + 'test.csv'
+    test_csp = base_path + 'csp3/class_3_vs_5_test_features.csv'
+
     window_size = 1000
-    selected_columns = [0, 2, 3, 4]  # 4ch
+    selected_columns = [
+        [0, [(10, 12), (12, 14)]],  # FCz
+        [2, [(20, 22), (22, 24)]],  # C3
+        [3, [(8, 10)]],  # Cz
+        [4, [(20, 22), (22, 24)]],  # C4
+        [5, [(28, 30)]],  # CP3
+    ]
 
     # Evaluate the fine-tuned model
-    model_id = 'ft:gpt-3.5-turbo-1106:personal::9ubj234q'  # Fine-tuned model id (check it in the openai dashboard)
+    model_id = 'ft:gpt-4o-2024-08-06:personal:label35csp:A4N1y9cr'  # Fine-tuned model id (check it in the openai dashboard)
 
     data, label = load_eeg_data(test_csv)
-    evaluate(data, label, window_size, selected_columns, model_id)
+    test_csp, test_csp_label = load_eeg_data(test_csp)
+    test_csp = test_csp.to_numpy()
+    evaluate(data, test_csp, label, window_size, selected_columns, model_id)
 
 
 if __name__ == '__main__':
