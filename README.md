@@ -4,7 +4,7 @@
   <li>LLM performs its own classification operations based on EEG data.</li>
   <li>We trained gpt-4o model utilizing fine-tuning for better performance.</li>
 </ul>
-<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/5e44d117-c761-4bcb-8ea0-a7a612ddc33a">
+<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/9803f163-de78-4ad8-9341-41bc65a46a91">
 
 <br>
 <h2>Requirements</h2>
@@ -42,7 +42,7 @@
 <ul>
   <li><strong>Accuracy</strong></li>
   <li><strong>F1 score</strong></li>
-  <li><strong>Cohen's Kappa Coefficient</strong></li>
+  <li><strong>ROC-AUC</strong></li>
 </ul>
 <p>(Metrics plot will be here)</p>
 </p>
