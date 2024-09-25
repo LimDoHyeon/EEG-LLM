@@ -40,7 +40,7 @@ def pipeline(csv_path, csp_path, json_path, jsonl_path, window_size, selected_co
 
 
 def main():
-    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subject 1 data (k3b)/down sampling X ver/label45/'
+    base_path = 'your_path'
 
     train_csv_path = base_path + 'train.csv'
     val_csv_path = base_path + 'val.csv'
@@ -51,8 +51,8 @@ def main():
     val_json_path = base_path + 'json/val.json'
     val_jsonl_path = base_path + 'jsonl/val.jsonl'
 
-    train_csp_path = base_path + 'csp4/class_4_vs_5_train_features.csv'
-    val_csp_path = base_path + 'csp4/class_4_vs_5_val_features.csv'
+    train_csp_path = base_path + 'csp4/your_csp.csv'
+    val_csp_path = base_path + 'csp4/your_csp.csv'
 
     train_csp, train_csp_label = load_eeg_data(train_csp_path)
     val_csp, val_csp_label = load_eeg_data(val_csp_path)
@@ -72,7 +72,6 @@ def main():
 
     pipeline(train_csv_path, train_csp, train_json_path, train_jsonl_path, window_size, selected_columns)
     pipeline(val_csv_path, val_csp, val_json_path, val_jsonl_path, window_size, selected_columns)
-    # pipeline(test_csv_path, test_json_path, test_jsonl_path, window_size, selected_columns)
 
 
 if __name__ == '__main__':

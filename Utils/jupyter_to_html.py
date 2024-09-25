@@ -25,6 +25,6 @@ def convert_notebook_to_html(notebook_path, output_html_path=None):
     return output_html_path
 
 if __name__ == '__main__':
-    convert_notebook_to_html('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Task/train_svm_grid.ipynb')
-    convert_notebook_to_html('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Task/train_rf_grid.ipynb')
-    convert_notebook_to_html('/Users/imdohyeon/Documents/PythonWorkspace/EEG-LLM/Task/train_mlp_grid.ipynb')
+    convert_notebook_to_html('/Task/ml/train_svm_grid.ipynb')
+    convert_notebook_to_html('/Task/ml/train_rf_grid.ipynb')
+    convert_notebook_to_html('/Task/ml/train_mlp_grid.ipynb')

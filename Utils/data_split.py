@@ -50,7 +50,7 @@ def data_split(data, train_dir, val_dir, test_dir):
 
 
 def main():
-    base_dir = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subj(high+inter+low)/'
+    base_dir = 'your_path'
     df = pd.read_csv(base_dir + 'laf_eeg_data_9ch_840000.csv')
     train_dir = base_dir + 'train.csv'
     val_dir = base_dir + 'val.csv'

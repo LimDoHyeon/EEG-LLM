@@ -47,9 +47,9 @@ def evaluate(data, csp, label, window_size, selected_columns, model_id):
 
 
 def main():
-    base_path = '/Users/imdohyeon/Library/CloudStorage/GoogleDrive-dhlim1598@gmail.com/공유 드라이브/4N_PKNU/Project/EEG-LLM/Dataset/subject 1 data (k3b)/down sampling X ver/label35/'
+    base_path = 'your_path'
     test_csv = base_path + 'test.csv'
-    test_csp = base_path + 'csp3/class_3_vs_5_test_features.csv'
+    test_csp = base_path + 'csp/your_csp.csv'
 
     window_size = 1000
     selected_columns = [
@@ -61,7 +61,7 @@ def main():
     ]
 
     # Evaluate the fine-tuned model
-    model_id = 'ft:gpt-4o-2024-08-06:personal:label35csp:A4N1y9cr'  # Fine-tuned model id (check it in the openai dashboard)
+    model_id = 'ft:gpt-4o-2024-08-06:your_model'  # Fine-tuned model id (check it in the openai dashboard)
 
     data, label = load_eeg_data(test_csv)
     test_csp, test_csp_label = load_eeg_data(test_csp)
