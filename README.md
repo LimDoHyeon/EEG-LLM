@@ -16,7 +16,7 @@
   <ul>
     <li>cued motor imagery (multi-class) with 4 classes (left hand, right hand, foot, tongue) three subjects (ranging from quite good to fair performance)</li>
     <li>EEG, 60 channels, 60 trials per class</li>
-    <li>performance measure: kappa-coefficient</li>
+    <li>performance measure: kappa-coefficient (we use Accuracy, F1-score, and ROC-AUC instead of this)</li>
   </ul>
 <br>
 <p><strong>Download</strong> : BBCI Competition III (https://www.bbci.de/competition/iii/download/index.html?agree=yes&submit=Submit)</p>
