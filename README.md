@@ -4,7 +4,7 @@
   <li>LLM performs its own classification operations based on EEG data.</li>
   <li>We trained gpt-4o model utilizing fine-tuning for better performance.</li>
 </ul>
-<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/9803f163-de78-4ad8-9341-41bc65a46a91">
+<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/5e44d117-c761-4bcb-8ea0-a7a612ddc33a">
 
 <br>
 <h2>Requirements</h2>
@@ -27,10 +27,10 @@
 <table style="border-collapse: collapse; width: 100%; data-ke-align="alignLeft">
   <tbody>
         <tr>
-            <td style="width: 50%;"><img width="500" alt="fr_label1" src="https://github.com/user-attachments/assets/657684c1-7cf2-41eb-a10f-e4d1f0ca2159"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label2" src="https://github.com/user-attachments/assets/baf30b29-2513-4078-a01d-ab3bf524ef17"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label3" src="https://github.com/user-attachments/assets/f63b1310-513e-4335-b64e-6c1014964eb9"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label4" src="https://github.com/user-attachments/assets/ac46f692-9e85-4d32-bffc-7f73ac26b44e"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label1" src="https://github.com/user-attachments/assets/d731b564-65e8-4f13-b28b-b6391eb267eb"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label2" src="https://github.com/user-attachments/assets/0c621691-6dd3-4c89-9113-d0c7b0e3bf70"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label3" src="https://github.com/user-attachments/assets/0479cd0c-5a48-4c4c-b763-0c06d253c81c"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label4" src="https://github.com/user-attachments/assets/a825d381-3506-47b1-8c5b-82522fd770d3"></td>
         </tr>
   </tbody>
 </table>
