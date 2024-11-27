@@ -1,10 +1,10 @@
 <h2>Fine-tuned LLM for Electroencephalography(EEG) data classification</h2>
-<p>This is LLM Fine tuning model that classifies four movements (left arm, right arm, tongue, foot) from EEG.</p>
+<p>This is LLM Fine tuning model that classifies four movements (left hand, right hand, tongue, foot) from EEG.</p>
 <ul>
   <li>LLM performs its own classification operations based on EEG data.</li>
   <li>We trained gpt-4o model utilizing fine-tuning for better performance.</li>
 </ul>
-<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/5e44d117-c761-4bcb-8ea0-a7a612ddc33a">
+<img width="927" alt="figure1" src="https://github.com/user-attachments/assets/18f66f60-1b33-45af-9929-befd06ef0d55">
 
 <br>
 <h2>Requirements</h2>
@@ -16,24 +16,26 @@
   <ul>
     <li>cued motor imagery (multi-class) with 4 classes (left hand, right hand, foot, tongue) three subjects (ranging from quite good to fair performance)</li>
     <li>EEG, 60 channels, 60 trials per class</li>
-    <li>performance measure: kappa-coefficient (we use Accuracy, F1-score, and ROC-AUC instead of this)</li>
+    <li>performance measure: kappa-coefficient</li>
   </ul>
 <br>
 <p><strong>Download</strong> : BBCI Competition III (https://www.bbci.de/competition/iii/download/index.html?agree=yes&submit=Submit)</p>
 
 <br>
 <h2>Features</h2>
-<p>For feature selection and extraction, <strong>Fisher Ratio</strong> is utilized.</p>
+<p>1) <strong>Power spectral density (PSD)</strong> is computed in 2Hz steps from 4Hz to 36Hz.</p>
+<p>For feature selection, <strong>Fisher Ratio</strong> is utilized.</p>
 <table style="border-collapse: collapse; width: 100%; data-ke-align="alignLeft">
   <tbody>
         <tr>
-            <td style="width: 50%;"><img width="500" alt="fr_label1" src="https://github.com/user-attachments/assets/d731b564-65e8-4f13-b28b-b6391eb267eb"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label2" src="https://github.com/user-attachments/assets/0c621691-6dd3-4c89-9113-d0c7b0e3bf70"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label3" src="https://github.com/user-attachments/assets/0479cd0c-5a48-4c4c-b763-0c06d253c81c"></td>
-            <td style="width: 50%;"><img width="500" alt="fr_label4" src="https://github.com/user-attachments/assets/a825d381-3506-47b1-8c5b-82522fd770d3"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label1" src="https://github.com/user-attachments/assets/619a317b-f0d0-4600-9fe7-14da35aec61a"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label2" src="https://github.com/user-attachments/assets/ccb4fc57-7db1-4902-b231-6400043e33ef"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label3" src="https://github.com/user-attachments/assets/9bc6ef09-93ac-4f9a-82c7-c173cacb798e"></td>
+            <td style="width: 50%;"><img width="500" alt="fr_label4" src="https://github.com/user-attachments/assets/528634b7-558e-4704-97b2-38dd7b427eea"></td>
         </tr>
   </tbody>
 </table>
+<p>2) <strong>Common spatial pattern (CSP)</strong> is used to extract spatial features that maximize discriminability between classes.</p>
 
 <br>
 <h2>Evaluation</h2>
@@ -44,5 +46,3 @@
   <li><strong>F1 score</strong></li>
   <li><strong>ROC-AUC</strong></li>
 </ul>
-<p>(Metrics plot will be here)</p>
-</p>
