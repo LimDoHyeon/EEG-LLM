@@ -1,3 +1,6 @@
+> This project was presented as a poster at the Cyberworlds 2024 international conference held in Yamanashi, Japan.<br><p>https://cyberworlds2024.yamanashi-u.jp/accepted-papers/</p>
+<br>
+
 <h2>Fine-tuned LLM for Electroencephalography(EEG) data classification</h2>
 <p>This is LLM Fine tuning model that classifies four movements (left hand, right hand, tongue, foot) from EEG.</p>
 <ul>
@@ -40,9 +43,9 @@
 <br>
 <h2>Evaluation</h2>
 <p>To compare fine-tuned LLM classifier's performance with traditional ML models, we additionally trained <strong>SVM</strong>, <strong>RF</strong> and <strong>MLP</strong> in the same data and same preprocessing method.</p>
-<p>Performance metrics:
+<p>Performance metrics: <strong>Accuracy, F1 score, ROC-AUC</strong></p>
+<img width=60% src="https://github.com/user-attachments/assets/b7c0047f-2f4f-44f4-8d0f-796bc7e5ef3c">
 <ul>
-  <li><strong>Accuracy</strong></li>
-  <li><strong>F1 score</strong></li>
-  <li><strong>ROC-AUC</strong></li>
+  <li>Although the performance of the GPT-4o-based supervised learning model slightly lagged behind traditional machine learning models, this project is significant in demonstrating the potential of utilizing LLMs as supervised learning models.</li>
+  <li>Furthermore, it highlights the expectation that as LLM performance continues to improve, the capabilities of LLM-based supervised learning models will also advance.</li>
 </ul>
