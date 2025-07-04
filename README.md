@@ -1,4 +1,4 @@
-> This project was presented as a poster at the Cyberworlds 2024 international conference held in Yamanashi, Japan.<br><p>https://cyberworlds2024.yamanashi-u.jp/accepted-papers/</p>
+> This project was presented as a poster at the Cyberworlds 2024 international conference held in Yamanashi, Japan.<br><p>https://ieeexplore.ieee.org/document/10918230/</p>
 <br>
 
 <h2>Fine-tuned LLM for Electroencephalography(EEG) data classification</h2>
